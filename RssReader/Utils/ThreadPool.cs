@@ -6,12 +6,24 @@ namespace RssReader.Utils
 {
     class ThreadPool: IDisposable
     {
-        
+        private readonly ActionQueueAsync _queue;
+        private readonly List<Thread> _workers;
+        private bool _disposed = false;
+
         // Public
 
         public ThreadPool(int threadsCount)
         {
-            throw new NotImplementedException();
+            _queue = new ActionQueueAsync();
+            _workers = new List<Thread>(threadsCount);
+
+            for (var i = 0; i < threadsCount; ++i)
+            {
+                var worker = new Thread(WorkerBody);
+                _workers.Add(worker);
+
+                worker.Start(_queue);
+            }
         }
 
         ~ThreadPool()
@@ -21,7 +33,10 @@ namespace RssReader.Utils
 
         public void QueueTask(Action task)
         {
-            throw new NotImplementedException();
+            if (!_disposed)
+            {
+                _queue.Enqueue(task);
+            }
         }
 
         public void Dispose()
@@ -34,12 +49,26 @@ namespace RssReader.Utils
 
         private void Dispose(bool safe)
         {
-            throw new NotImplementedException();
+            _disposed = true;
+            _queue.Release();
+
+            foreach (var worker in _workers)
+            {
+                worker.Join();
+            }
+            _queue.Clear();
         }
 
         private void WorkerBody(object actionQueue)
         {
-            throw new NotImplementedException();
+            while (!_disposed)
+            {
+                Action task = (actionQueue as ActionQueueAsync)?.Dequeue();
+                if (!_disposed)
+                {
+                    task?.Invoke();
+                }
+            }
         }
 
     }

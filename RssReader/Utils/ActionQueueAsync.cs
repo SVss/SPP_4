@@ -9,6 +9,11 @@ namespace RssReader.Utils
     /// </summary>
     class ActionQueueAsync
     {
+        private readonly Queue<Action> _queue = new Queue<Action>();
+        private readonly object _locker = new object();
+        private bool _released = false;
+        private int _readersCount = 0;
+
         // Public
 
         /// <summary>
@@ -18,7 +23,13 @@ namespace RssReader.Utils
         /// <param name="task">Task to be queued</param>
         public void Enqueue(Action task)
         {
-            throw new NotImplementedException();
+            if (task == null)
+                return;
+
+            lock (_locker) { 
+                _queue.Enqueue(task);
+                Monitor.PulseAll(_locker);
+            }
         }
 
         /// <summary>
@@ -31,7 +42,34 @@ namespace RssReader.Utils
         /// </returns>
         public Action Dequeue()
         {
-            throw new NotImplementedException();
+            Action result = null;
+            lock (_locker)
+            {
+                while (_released)
+                {
+                    Monitor.Wait(_locker);
+                }
+
+                ++_readersCount;
+
+                while (!_released &&(_queue.Count == 0))
+                {
+                    Monitor.Wait(_locker);
+                }
+                if (!_released)
+                {
+                    result = _queue.Dequeue();
+                }
+
+                --_readersCount;
+
+                if (_released && (_readersCount == 0))
+                {
+                    _released = false;
+                    Monitor.PulseAll(_locker);
+                }
+            }
+            return result;
         }
 
         /// <summary>
@@ -43,7 +81,11 @@ namespace RssReader.Utils
         /// </remarks>
         public void Release()
         {
-            throw new NotImplementedException();
+            lock (_locker)
+            {
+                _released = true;
+                Monitor.PulseAll(_locker);
+            }
         }
 
         /// <summary>
@@ -51,7 +93,10 @@ namespace RssReader.Utils
         /// </summary>
         public void Clear()
         {
-            throw new NotImplementedException();
+            lock (_locker)
+            {
+                _queue.Clear();
+            }
         }
     }
 }

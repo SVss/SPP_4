@@ -11,7 +11,7 @@ namespace ThreadPool
     {
         private readonly Queue<Action> _queue = new Queue<Action>();
         private readonly object _locker = new object();
-        private bool _released = false;
+        private bool _releasing = false;
         private int _readersCount = 0;
 
         // Public
@@ -33,7 +33,7 @@ namespace ThreadPool
         }
 
         /// <summary>
-        /// Get task from queue's peek.
+        /// Dequeue task to be processed.
         /// Waits while <c>ActionQueue</c> is locked or empty.
         /// </summary>
         /// <returns>
@@ -45,27 +45,27 @@ namespace ThreadPool
             Action result = null;
             lock (_locker)
             {
-                while (_released)
+                while (_releasing)
                 {
                     Monitor.Wait(_locker);
                 }
 
                 ++_readersCount;
 
-                while (!_released &&(_queue.Count == 0))
+                while (!_releasing &&(_queue.Count == 0))
                 {
                     Monitor.Wait(_locker);
                 }
-                if (!_released)
+                if (!_releasing)
                 {
                     result = _queue.Dequeue();
                 }
 
                 --_readersCount;
 
-                if (_released && (_readersCount == 0))
+                if (_releasing && (_readersCount == 0))
                 {
-                    _released = false;
+                    _releasing = false;
                     Monitor.PulseAll(_locker);
                 }
             }
@@ -85,7 +85,7 @@ namespace ThreadPool
             {
                 if (_readersCount > 0)
                 {
-                    _released = true;
+                    _releasing = true;
                     Monitor.PulseAll(_locker);
                 }
             }

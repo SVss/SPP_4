@@ -4,7 +4,7 @@ using System.Threading;
 
 namespace ThreadPool
 {
-    public class ThreadPool: IDisposable
+    public class ExtThreadPool: IDisposable
     {
         private readonly ActionQueueAsync _queue;
         private readonly List<Thread> _workers;
@@ -16,7 +16,7 @@ namespace ThreadPool
         /// Create thread pool with <c>threadsCount</c> worker threads.
         /// </summary>
         /// <param name="threadsCount"></param>
-        public ThreadPool(int threadsCount)
+        public ExtThreadPool(int threadsCount)
         {
             _queue = new ActionQueueAsync();
             _workers = new List<Thread>(threadsCount);
@@ -30,7 +30,7 @@ namespace ThreadPool
             }
         }
 
-        ~ThreadPool()
+        ~ExtThreadPool()
         {
             Dispose(false);
         }
@@ -44,7 +44,7 @@ namespace ThreadPool
         {
             if (_disposed)
             {
-                throw new ObjectDisposedException("Can't enqueue task to disposed ThreadPool queue");
+                throw new ObjectDisposedException("Can't enqueue task to disposed ExtThreadPool queue");
             }
 
             _queue.Enqueue(task);

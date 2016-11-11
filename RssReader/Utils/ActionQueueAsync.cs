@@ -83,8 +83,11 @@ namespace RssReader.Utils
         {
             lock (_locker)
             {
-                _released = true;
-                Monitor.PulseAll(_locker);
+                if (_readersCount > 0)
+                {
+                    _released = true;
+                    Monitor.PulseAll(_locker);
+                }
             }
         }
 

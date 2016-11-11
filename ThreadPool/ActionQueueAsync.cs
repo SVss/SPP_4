@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 
-namespace RssReader.Utils
+namespace ThreadPool
 {
     /// <summary>
     /// Asychronous <c>Queue</c> of <c>Actions</c>.

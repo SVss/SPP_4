@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Threading;
 
-namespace RssReader.Utils
+namespace ThreadPool
 {
-    class ThreadPool: IDisposable
+    public class ThreadPool: IDisposable
     {
         private readonly ActionQueueAsync _queue;
         private readonly List<Thread> _workers;

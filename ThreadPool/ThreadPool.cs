@@ -12,6 +12,10 @@ namespace ThreadPool
 
         // Public
 
+        /// <summary>
+        /// Create thread pool with <c>threadsCount</c> worker threads.
+        /// </summary>
+        /// <param name="threadsCount"></param>
         public ThreadPool(int threadsCount)
         {
             _queue = new ActionQueueAsync();
@@ -31,16 +35,35 @@ namespace ThreadPool
             Dispose(false);
         }
 
-        public void QueueTask(Action task)
+        /// <summary>
+        /// Add task to processing queue.
+        /// </summary>
+        /// <param name="task">Task to be enqueued.</param>
+        /// <exception cref="ObjectDisposedException"></exception>
+        public void EnqueueTask(Action task)
         {
-            if (!_disposed)
+            if (_disposed)
             {
-                _queue.Enqueue(task);
+                throw new ObjectDisposedException("Can't enqueue task to disposed ThreadPool queue");
             }
+
+            _queue.Enqueue(task);
+        }
+
+        /// <summary>
+        /// Clear processing queue.
+        /// Worker threads that already got tasks to process won't stop.
+        /// </summary>
+        public void ClearQueue()
+        {
+            _queue.Clear();
         }
 
         public void Dispose()
         {
+            if (_disposed)
+                return;
+
             Dispose(true);
             GC.SuppressFinalize(this);
         }
@@ -49,6 +72,8 @@ namespace ThreadPool
 
         private void Dispose(bool safe)
         {
+            _queue.Clear();
+
             _disposed = true;
             _queue.Release();
 
@@ -56,14 +81,14 @@ namespace ThreadPool
             {
                 worker.Join();
             }
-            _queue.Clear();
         }
 
         private void WorkerBody(object actionQueue)
         {
+            var queue = actionQueue as ActionQueueAsync;
             while (!_disposed)
             {
-                Action task = (actionQueue as ActionQueueAsync)?.Dequeue();
+                Action task = queue.Dequeue();
                 if (!_disposed)
                 {
                     task?.Invoke();

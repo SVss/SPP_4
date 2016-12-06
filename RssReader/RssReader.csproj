@@ -64,6 +64,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BadXmlException.cs" />
+    <Compile Include="Model\AppModel.cs" />
     <Compile Include="Model\FeedModel.cs" />
     <Compile Include="Model\FilterModel.cs" />
     <Compile Include="Model\NewsModel.cs" />

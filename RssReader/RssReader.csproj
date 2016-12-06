@@ -78,6 +78,8 @@
     <Compile Include="Model\NewsModel.cs" />
     <Compile Include="Model\UserModel.cs" />
     <Compile Include="Utils\ConfigConsts.cs" />
+    <Compile Include="Utils\EventsManager.cs" />
+    <Compile Include="Utils\RelayCommand.cs" />
     <Compile Include="ViewModel\AppViewModel.cs" />
     <Compile Include="ViewModel\BaseViewModel.cs" />
     <Compile Include="ViewModel\FeedViewModel.cs" />

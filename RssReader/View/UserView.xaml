@@ -20,12 +20,17 @@
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <ListView Grid.Row="0">
+            <ListView Grid.Row="0" Margin="3">
                 <ListView.InputBindings>
-                    <KeyBinding Key="Space" Command="{Binding SwitchSelected}"></KeyBinding>
+                    <KeyBinding Key="Space" Command="{Binding Path=SwitchSelectedFeedCommand}"/>
                 </ListView.InputBindings>
+                
+                <ListView.SelectedItem>
+                    <Binding Path="SelectedFeed" Mode="TwoWay"></Binding>
+                </ListView.SelectedItem>
                 
                 <ListView.ItemsSource>
                     <Binding Path="FeedsList"/>
@@ -38,10 +43,33 @@
                 </ListView.ItemTemplate>
             </ListView>
 
-            <Button Grid.Row="1">Update</Button>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                
+                <Button Grid.Column="0">
+                    <Button.Command>
+                        <Binding Path="SelectAllFeedsCommand"></Binding>
+                    </Button.Command>
+                    
+                    <TextBlock>All</TextBlock>
+                </Button>
+                
+                <Button Grid.Column="1">
+                    <Button.Command>
+                        <Binding Path="UnselectAllFeedsCommand"></Binding>
+                    </Button.Command>
+                    
+                    <TextBlock>None</TextBlock>
+                </Button>
+            </Grid>
+            
+            <Button Grid.Row="2" Margin="5">Update</Button>
         </Grid>
 
-        <ListView Grid.Column="1">
+        <ListView Grid.Column="1" Margin="3">
             <ListView.ItemTemplate>
                 <DataTemplate>
 

@@ -8,7 +8,7 @@ using RssReader.Utils;
 
 namespace RssReader.Model
 {
-    class AppModel
+    public class AppModel
     {
         public List<UserModel> UsersList { get; private set; } = new List<UserModel>();
 
@@ -28,7 +28,12 @@ namespace RssReader.Model
 
         public void LoadUsersFromXml(XmlDocument document)
         {
-            XmlElement root = document.FirstChild as XmlElement;
+            XmlNode root = document.FirstChild;
+            if (root is XmlDeclaration)
+            {
+                root = root.NextSibling as XmlElement;
+            }
+
             if ((root == null) || (root.Name != ConfigConsts.RootTag))
             {
                 throw new BadXmlException();

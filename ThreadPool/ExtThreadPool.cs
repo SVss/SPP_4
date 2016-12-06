@@ -10,7 +10,7 @@ namespace ThreadPool
         private readonly List<Thread> _workers;
         private bool _disposed = false;
 
-        // Public
+        #region Public
 
         /// <summary>
         /// Create thread pool with <c>threadsCount</c> worker threads.
@@ -68,7 +68,9 @@ namespace ThreadPool
             GC.SuppressFinalize(this);
         }
 
-        // Internals
+        #endregion
+
+        #region Internals
 
         private void Dispose(bool safe)
         {
@@ -77,7 +79,7 @@ namespace ThreadPool
             _disposed = true;
             _queue.Release();
 
-            foreach (var worker in _workers)
+            foreach (Thread worker in _workers)
             {
                 worker.Join();
             }
@@ -85,16 +87,23 @@ namespace ThreadPool
 
         private void WorkerBody(object actionQueue)
         {
-            var queue = actionQueue as ActionQueueAsync;
-            while (!_disposed)
+            try
             {
-                Action task = queue.Dequeue();
-                if (!_disposed)
+                var queue = actionQueue as ActionQueueAsync;
+                while (!_disposed)
                 {
-                    task?.Invoke();
+                    Action task = queue.Dequeue();
+                    if (!_disposed)
+                    {
+                        task?.Invoke();
+                    }
                 }
             }
+            catch (ThreadAbortException)
+            {
+                Thread.ResetAbort();
+            }
         }
-
+        #endregion
     }
 }

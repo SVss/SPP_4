@@ -7,7 +7,7 @@ namespace ThreadPool
     /// <summary>
     /// Asychronous <c>Queue</c> of <c>Actions</c>.
     /// </summary>
-    class ActionQueueAsync
+    public class ActionQueueAsync
     {
         private readonly Queue<Action> _queue = new Queue<Action>();
         private readonly object _locker = new object();
@@ -26,9 +26,18 @@ namespace ThreadPool
             if (task == null)
                 return;
 
-            lock (_locker) { 
+            bool locked = false;
+            try
+            {
+                Monitor.Enter(_locker, ref locked);
+
                 _queue.Enqueue(task);
                 Monitor.PulseAll(_locker);
+            }
+            finally
+            {
+                if (locked)
+                    Monitor.Exit(_locker);
             }
         }
 
@@ -43,8 +52,12 @@ namespace ThreadPool
         public Action Dequeue()
         {
             Action result = null;
-            lock (_locker)
+
+            bool locked = false;
+            try
             {
+                Monitor.Enter(_locker, ref locked);
+
                 while (_releasing)
                 {
                     Monitor.Wait(_locker);
@@ -69,6 +82,11 @@ namespace ThreadPool
                     Monitor.PulseAll(_locker);
                 }
             }
+            finally
+            {
+                if (locked)
+                    Monitor.Exit(_locker);
+            }
             return result;
         }
 
@@ -81,13 +99,21 @@ namespace ThreadPool
         /// </remarks>
         public void Release()
         {
-            lock (_locker)
+            bool locked = false;
+            try
             {
+                Monitor.Enter(_locker, ref locked);
+
                 if (_readersCount > 0)
                 {
                     _releasing = true;
                     Monitor.PulseAll(_locker);
                 }
+            }
+            finally
+            {
+                if (locked)
+                    Monitor.Exit(_locker);
             }
         }
 
@@ -96,9 +122,17 @@ namespace ThreadPool
         /// </summary>
         public void Clear()
         {
-            lock (_locker)
+            bool locked = false;
+            try
             {
+                Monitor.Enter(_locker, ref locked);
+
                 _queue.Clear();
+            }
+            finally
+            {
+                if (locked)
+                    Monitor.Exit(_locker);
             }
         }
     }

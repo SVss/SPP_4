@@ -20,6 +20,8 @@ namespace RssReader.Utils
         public static string FiltersListTag => "filters";
         public static string IncludeFilterTag => "include";
         public static string ExcludeFilterTag => "exclude";
+        public static string AndFilterMethodTag => "and";
+        public static string OrFilterMethodTag => "or";
         public static string FilterItemTag => "item";
     }
 }

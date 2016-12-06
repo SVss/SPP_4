@@ -64,6 +64,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BadXmlException.cs" />
+    <Compile Include="Model\FeedModel.cs" />
+    <Compile Include="Model\FilterModel.cs" />
+    <Compile Include="Model\NewsModel.cs" />
+    <Compile Include="Model\UserModel.cs" />
     <Compile Include="Utils\ConfigConsts.cs" />
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -98,7 +102,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Model\" />
     <Folder Include="ViewModel\" />
   </ItemGroup>
   <ItemGroup>

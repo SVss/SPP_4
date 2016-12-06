@@ -10,6 +10,8 @@ namespace RssReader.Model
 
         public string FullText => Caption + Environment.NewLine + Description;
 
+        // Public
+
         public NewsModel(string caption, string description, string linkPath)
         {
             Uri result;

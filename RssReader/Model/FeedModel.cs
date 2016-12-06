@@ -7,8 +7,10 @@ namespace RssReader.Model
 {
     public class FeedModel
     {
-        public Uri Link { get; private set; }
+        public Uri Link { get; set; }
         public List<NewsModel> NewsList { get; private set; } = new List<NewsModel>();
+
+        // Public
 
         public FeedModel(string linkPath)
         {

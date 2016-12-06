@@ -7,7 +7,7 @@ namespace RssReader.Model
 {
     public class UserModel
     {
-        public string Name { get; private set; }
+        public string Name { get; set; }
         public int ThreadsCount { get; set; }
 
         public List<FeedModel> FeedsList { get; } = new List<FeedModel>();

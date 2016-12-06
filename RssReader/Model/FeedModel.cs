@@ -1,27 +1,53 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Xml;
+using RssReader.Utils;
 
 namespace RssReader.Model
 {
-    class FeedModel
+    public class FeedModel
     {
-        public string Link { get; private set; }
+        public Uri Link { get; private set; }
         public List<NewsModel> NewsList { get; private set; } = new List<NewsModel>();
 
-        public FeedModel(string link)
+        public FeedModel(string linkPath)
         {
-            this.Link = link;
+            Uri result;
+            if (!Uri.TryCreate(linkPath, UriKind.Absolute, out result))
+            {
+                throw new ArgumentException();
+            }
+
+            Link = result;
         }
 
         public static FeedModel FromXmlElement(XmlElement xe)
         {
-            throw new NotImplementedException();
+            if (xe.Name != ConfigConsts.ChannelTag)
+            {
+                throw new BadXmlException();
+            }
+
+            FeedModel result = null;
+
+            string linkPath = xe.InnerText;
+            try
+            {
+                result = new FeedModel(linkPath);
+            }
+            catch (ArgumentException)
+            {
+                throw new BadXmlException();
+            }
+
+            return result;
         }
 
-        public XmlElement ToXmlElement()
+        public XmlElement ToXmlElement(XmlDocument document)
         {
-            throw new NotImplementedException();
+            XmlElement result = document.CreateElement(ConfigConsts.ChannelTag);
+            result.InnerText = Link.ToString();
+            return result;
         }
     }
 }

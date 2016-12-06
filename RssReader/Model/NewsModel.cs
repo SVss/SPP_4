@@ -2,7 +2,7 @@
 
 namespace RssReader.Model
 {
-    class NewsModel
+    public class NewsModel
     {
         public string Caption { get; private set; }
         public string Description { get; private set; }

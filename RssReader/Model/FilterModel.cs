@@ -119,6 +119,9 @@ namespace RssReader.Model
 
         protected bool CheckAndList(string s)
         {
+            if (AndList.Count == 0)
+                return true;
+
             bool result = true;
 
             int i = 0;
@@ -133,6 +136,9 @@ namespace RssReader.Model
 
         protected bool CheckOrList(string s)
         {
+            if (OrList.Count == 0)
+                return true;
+
             bool result = false;
 
             int i = 0;

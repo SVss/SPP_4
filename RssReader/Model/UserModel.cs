@@ -17,10 +17,26 @@ namespace RssReader.Model
         private readonly object _sync = new object();
         private readonly SynchronizationContext _context = SynchronizationContext.Current;
 
-        public bool ErrorOccured = false;
+        private int _threadsCount;
 
         public string Name { get; set; }
-        public int ThreadsCount { get; set; }
+
+        public int ThreadsCount
+        {
+            get { return _threadsCount; }
+            set
+            {
+                if (value != _threadsCount)
+                {
+                    if (value > 0)
+                    {
+                        _threadsCount = value;
+                        _userThreadPool.Reinit(_threadsCount);
+                        OnPropertyChanged();
+                    }
+                }
+            }
+        }
 
         public List<FeedModel> FeedsList { get; } = new List<FeedModel>();
         public List<FilterModel> FiltersList { get; private set; } = new List<FilterModel>();
@@ -46,7 +62,7 @@ namespace RssReader.Model
         public UserModel(string name, int threadsCount)
         {
             this.Name = name;
-            this.ThreadsCount = threadsCount;
+            this._threadsCount = threadsCount;
             _userThreadPool = new ExtThreadPool(threadsCount);
         }
 
@@ -70,7 +86,6 @@ namespace RssReader.Model
 
                     if (result == null)
                     {
-                        ErrorOccured = true;
                         feed.Status = FeedStatus.Error;
                     }
                     else

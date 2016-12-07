@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:RssReader.View.Dialogs"
         xmlns:viewModels="clr-namespace:RssReader.ViewModel"
         mc:Ignorable="d"
-        Title="Users" Height="300" Width="400" ShowInTaskbar="False" Topmost="True">
+        Title="Users" Height="300" Width="400" ShowInTaskbar="False">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>

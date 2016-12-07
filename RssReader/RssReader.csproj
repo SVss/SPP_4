@@ -65,6 +65,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\Dialogs\EditUserDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\FeedView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -106,6 +110,9 @@
     </Compile>
     <Compile Include="View\Dialogs\UsersConfigDialog.xaml.cs">
       <DependentUpon>UsersConfigDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Dialogs\EditUserDialog.xaml.cs">
+      <DependentUpon>EditUserDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\FeedView.xaml.cs">
       <DependentUpon>FeedView.xaml</DependentUpon>

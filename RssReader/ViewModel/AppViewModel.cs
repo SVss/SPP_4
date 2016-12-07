@@ -229,8 +229,8 @@ namespace RssReader.ViewModel
 
         private void ShowEditUserDialog(object obj)
         {
-            // TODO
-            MessageBox.Show("Edit user.");
+            var dialog = new EditUserDialog(SelectedUsersConfigDialog as UserViewModel);
+            dialog.ShowDialog();
         }
     }
 }

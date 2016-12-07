@@ -1,0 +1,66 @@
+﻿<Window x:Class="RssReader.View.Dialogs.EditUserDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RssReader.View.Dialogs"
+        mc:Ignorable="d"
+        Title="Edit user" Height="129.644" Width="300" ResizeMode="NoResize" ShowInTaskbar="False">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Label Grid.Column="0"  Grid.Row="0"
+                   Content="Name:"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"></Label>
+            <TextBox Grid.Column="1" Grid.Row="0" Margin="5">
+                <TextBox.Text>
+                    <Binding Path="Name" Mode="TwoWay"/>
+                </TextBox.Text>
+            </TextBox>
+
+            <Label Grid.Column="0"  Grid.Row="1"
+                   Content="Threads count:"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"></Label>
+            <TextBox Grid.Column="1" Grid.Row="1" Margin="5"
+                     Text="{Binding Path=ThreadsCount, Mode=TwoWay}">
+            </TextBox>
+        </Grid>
+
+        <Grid Grid.Row="1" Margin="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0"
+                HorizontalAlignment="Center"
+                Padding="20 0 20 0" Margin="3"
+                Command="{Binding Path=OpenFiltersDialogCommand}">
+                <Button.Content>Filters...</Button.Content>
+            </Button>
+
+            <Button Grid.Column="1"
+                HorizontalAlignment="Center"
+                Padding="20 0 20 0" Margin="3"
+                Click="CloseClick">
+                <Button.Content>Close</Button.Content>
+            </Button>
+        </Grid>
+    </Grid>
+</Window>

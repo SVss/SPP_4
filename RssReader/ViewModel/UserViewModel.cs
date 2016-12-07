@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows;
 using System.Windows.Input;
 using RssReader.Model;
 using RssReader.Utils;
@@ -16,7 +17,21 @@ namespace RssReader.ViewModel
             return _model;
         }
 
-        public string ThreadsCount => _model.ThreadsCount.ToString();
+        public int ThreadsCount
+        {
+            get { return _model.ThreadsCount; }
+            set
+            {
+                if (_model.ThreadsCount != value)
+                {
+                    if (value > 0)
+                    {
+                        _model.ThreadsCount = value;
+                        OnPropertyChanged();
+                    }
+                }
+            }
+        }
 
         public ObservableCollection<FeedViewModel> FeedsList { get; } =
             new ObservableCollection<FeedViewModel>();
@@ -50,7 +65,7 @@ namespace RssReader.ViewModel
         public RelayCommand SwitchSelectedFeedCommand { get; }
 
             // EditUser Dialog
-        // ...
+        public RelayCommand OpenFiltersDialogCommand { get; }
 
         // Public
 
@@ -72,6 +87,8 @@ namespace RssReader.ViewModel
             UnselectAllFeedsCommand = new RelayCommand(UnselectAllFeeds);
             SelectAllFeedsCommand = new RelayCommand(SelectAllFeeds);
             SwitchSelectedFeedCommand = new RelayCommand(SwitchSelectedFeed);
+
+            OpenFiltersDialogCommand = new RelayCommand(OpenFiltersDialog);
         }
 
         public void EndUpdating()
@@ -121,5 +138,10 @@ namespace RssReader.ViewModel
             CommandManager.InvalidateRequerySuggested();
         }
 
+
+        private void OpenFiltersDialog(object obj)
+        {
+            MessageBox.Show("Filters Dialog here");
+        }
     }
 }

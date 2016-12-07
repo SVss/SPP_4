@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using RssReader.Utils;
 
 namespace RssReader.View
 {
@@ -10,6 +11,7 @@ namespace RssReader.View
         public MainWindow()
         {
             InitializeComponent();
+            EventsManager.SetMainWindow(this);
         }
     }
 }

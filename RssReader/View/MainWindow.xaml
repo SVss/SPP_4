@@ -19,6 +19,28 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
+        <Menu Grid.Row="0">
+            <MenuItem Header="File">
+                <MenuItem Header="Exit">
+                    <MenuItem.Command>
+                        <Binding Path="ExitCommand"/>
+                    </MenuItem.Command>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="Users">
+                <MenuItem Header="Add user...">
+                    <MenuItem.Command>
+                        <Binding Path="AddUserCommand"/>
+                    </MenuItem.Command>
+                </MenuItem>
+                <MenuItem Header="Remove user...">
+                    <MenuItem.Command>
+                        <Binding Path="RemoveUserCommand"/>
+                    </MenuItem.Command>
+                </MenuItem>
+            </MenuItem>
+        </Menu>
+        
         <TabControl Grid.Row="1" Name="Users">
             <TabControl.SelectedItem>
                 <Binding Path="SelectedUser"></Binding>

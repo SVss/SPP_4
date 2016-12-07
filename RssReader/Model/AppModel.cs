@@ -12,6 +12,8 @@ namespace RssReader.Model
     {
         public List<UserModel> UsersList { get; private set; } = new List<UserModel>();
 
+        // Public
+
         public UserModel AddUser(string name, int threadsCount)
         {
             var result = new UserModel(name, threadsCount);

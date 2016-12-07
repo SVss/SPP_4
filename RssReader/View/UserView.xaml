@@ -5,10 +5,16 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:RssReader"
              xmlns:views="clr-namespace:RssReader.View"
+             xmlns:utils="clr-namespace:RssReader.Utils"
              xmlns:viewModels="clr-namespace:RssReader.ViewModel"
+             xmlns:model="clr-namespace:RssReader.Model"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-
+    
+    <UserControl.Resources>
+        <utils:NewsConverter x:Key="NewsConverter" ></utils:NewsConverter>
+    </UserControl.Resources>
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -25,17 +31,18 @@
 
             <ListView Grid.Row="0" Margin="3">
                 <ListView.InputBindings>
-                    <KeyBinding Key="Space" Command="{Binding Path=SwitchSelectedFeedCommand}"/>
+                    <KeyBinding Key="Space">
+                        <KeyBinding.Command>
+                            <Binding Path="SwitchSelectedFeedCommand"/>
+                        </KeyBinding.Command>
+                    </KeyBinding>
                 </ListView.InputBindings>
-                
                 <ListView.SelectedItem>
                     <Binding Path="SelectedFeed" Mode="TwoWay"></Binding>
                 </ListView.SelectedItem>
-                
                 <ListView.ItemsSource>
                     <Binding Path="FeedsList"/>
                 </ListView.ItemsSource>
-                
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <views:FeedView />
@@ -49,33 +56,51 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 
-                <Button Grid.Column="0">
+                <Button Grid.Column="0" Margin="5 2 2.5 0">
                     <Button.Command>
-                        <Binding Path="SelectAllFeedsCommand"></Binding>
+                        <Binding Path="SelectAllFeedsCommand"/>
                     </Button.Command>
                     
                     <TextBlock>All</TextBlock>
                 </Button>
                 
-                <Button Grid.Column="1">
+                <Button Grid.Column="1" Margin="2.5 2 5 0">
                     <Button.Command>
-                        <Binding Path="UnselectAllFeedsCommand"></Binding>
+                        <Binding Path="UnselectAllFeedsCommand"/>
                     </Button.Command>
                     
                     <TextBlock>None</TextBlock>
                 </Button>
             </Grid>
-            
-            <Button Grid.Row="2" Margin="5">Update</Button>
+
+            <Button Grid.Row="2" Margin="5">
+                <Button.Command>
+                    <Binding Path="UpdateNewsCommand"/>
+                </Button.Command>
+
+                <TextBlock>Update</TextBlock>
+            </Button>
         </Grid>
 
         <ListView Grid.Column="1" Margin="3">
+            <ListView.SelectedItem>
+                <Binding Path="SelectedNews" Mode="TwoWay"></Binding>
+            </ListView.SelectedItem>
+            <ListView.ItemsSource>
+                <Binding Path="NewsList"/>
+            </ListView.ItemsSource>
             <ListView.ItemTemplate>
-                <DataTemplate>
-
+                <DataTemplate DataType="{x:Type viewModels:NewsViewModel}">
+                    <TextBlock>
+                        <TextBlock.Text>
+                            <Binding Path="ShortCaption"/>
+                        </TextBlock.Text>
+                    </TextBlock>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
         
+        <!-- -->
+
     </Grid>
 </UserControl>

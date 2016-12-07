@@ -1,17 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Xml;
 using RssReader.Utils;
+using ThreadPool;
 
 namespace RssReader.Model
 {
     public class UserModel
     {
+        private ExtThreadPool _userThreadPool;
+        private readonly object _sync = new object();
+
         public string Name { get; set; }
         public int ThreadsCount { get; set; }
 
         public List<FeedModel> FeedsList { get; } = new List<FeedModel>();
         public List<FilterModel> FiltersList { get; private set; } = new List<FilterModel>();
+
+        public ObservableCollection<NewsModel> NewsList { get; private set; } =
+            new ObservableCollection<NewsModel>();
 
         // Public
 
@@ -19,6 +27,35 @@ namespace RssReader.Model
         {
             this.Name = name;
             this.ThreadsCount = threadsCount;
+        }
+
+        public void UpdateNews()
+        {
+            NewsList.Clear();
+            foreach (var feed in FeedsList)
+            {
+                _userThreadPool.EnqueueTask(() =>
+                {
+                    IList<NewsModel> result = RssFetcher.FetchNews(feed.Link);
+                    lock (_sync)
+                    {
+                        foreach (var news in result)
+                        {
+                            NewsList.Add(news);
+                        }
+                    }
+                });
+            }
+        }
+
+        public void StopUpdate()
+        {
+            _userThreadPool.ClearQueue();
+        }
+
+        public void EndUpdating()
+        {
+            _userThreadPool.Dispose();
         }
 
         public static UserModel FromXmlElement(XmlElement xe)
@@ -69,6 +106,8 @@ namespace RssReader.Model
                 result.FiltersList.Add(FilterModel.FromXmlElement(filter));
             }
 
+            result._userThreadPool = new ExtThreadPool(threadsCount);
+
             return result;
         }
 
@@ -97,5 +136,6 @@ namespace RssReader.Model
 
             return result;
         }
+
     }
 }

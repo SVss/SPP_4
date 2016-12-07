@@ -8,8 +8,6 @@ namespace RssReader.Model
         public string Description { get; private set; }
         public Uri Link { get; private set; }
 
-        public string FullText => Caption + Environment.NewLine + Description;
-
         // Public
 
         public NewsModel(string caption, string description, string linkPath)

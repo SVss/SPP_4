@@ -11,7 +11,11 @@ namespace RssReader.ViewModel
         public ObservableCollection<FeedViewModel> FeedsList { get; private set; } =
             new ObservableCollection<FeedViewModel>();
 
+        public ObservableCollection<NewsViewModel> NewsList =
+            new ObservableCollection<NewsViewModel>();
+
         public object SelectedFeed { get; set; }
+        public object SelectedNews { get; set; }
 
         public string Name
         {
@@ -19,11 +23,14 @@ namespace RssReader.ViewModel
             set
             {
                 _model.Name = value;
-                OnPropertyChanged("Name");
+                OnPropertyChanged();
             }
         }
 
         // Commands
+
+        public RelayCommand UpdateNewsCommand { get; }
+        public RelayCommand StopUpdateCommand { get; }
 
         public RelayCommand UnselectAllFeedsCommand { get; }
         public RelayCommand SelectAllFeedsCommand { get; }
@@ -40,6 +47,9 @@ namespace RssReader.ViewModel
             }
 
             // commands
+            UpdateNewsCommand = new RelayCommand(UpdateNews);
+            StopUpdateCommand = new RelayCommand(StopUpdate);
+
             UnselectAllFeedsCommand = new RelayCommand(UnselectAllFeeds);
             SelectAllFeedsCommand = new RelayCommand(SelectAllFeeds);
             SwitchSelectedFeedCommand = new RelayCommand(SwitchSelectedFeed);
@@ -47,7 +57,16 @@ namespace RssReader.ViewModel
 
         // Internals
 
-        // Event handlers
+        private void StopUpdate(object obj)
+        {
+            _model.StopUpdate();
+        }
+
+        private void UpdateNews(object obj)
+        {
+            _model.UpdateNews();
+        }
+
         private void UnselectAllFeeds(object args)
         {
             foreach (FeedViewModel feed in FeedsList)
@@ -73,5 +92,9 @@ namespace RssReader.ViewModel
             }
         }
 
+        public void EndUpdating()
+        {
+            _model.EndUpdating();
+        }
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Reflection;
+﻿using System.Collections.ObjectModel;
 using System.Xml;
 using RssReader.Utils;
 

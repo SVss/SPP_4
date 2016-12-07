@@ -51,7 +51,7 @@ namespace RssReader.ViewModel
             NewsList.CollectionChanged += (sender, args) => { OnPropertyChanged("NewsCount"); };
 
             // commands
-            UpdateNewsCommand = new RelayCommand(UpdateNews);
+            UpdateNewsCommand = new RelayCommand(UpdateNews);   // TODO: disable button
 
             UnselectAllFeedsCommand = new RelayCommand(UnselectAllFeeds);
             SelectAllFeedsCommand = new RelayCommand(SelectAllFeeds);

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Windows;
 using RssReader.Model;
 using RssReader.Utils;
 
@@ -12,7 +11,7 @@ namespace RssReader.ViewModel
         private readonly NewsModel _model;
 
         public string Caption => _model.Caption;
-        public string Description => _model.Description;
+        public string Description => _model.Description;    // TODO: get rid of image / show it X)
         public string Link => _model.Link.ToString();
 
         public string FullText => Caption + Environment.NewLine + Description;

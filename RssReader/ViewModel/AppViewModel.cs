@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Xml;
 using RssReader.Model;
@@ -88,17 +84,20 @@ namespace RssReader.ViewModel
 
         private void AddUser(object args)
         {
+            // TODO
             MessageBox.Show("Add user dialog.");
         }
 
         private void RemoveUser(object args)
         {
+            // TODO
             MessageBox.Show("Remove user dialog.");
         }
 
 
         private void EditUserFilters(object obj)
         {
+            // TODO
             MessageBox.Show("Edit user filters.");
         }
     }

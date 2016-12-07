@@ -21,9 +21,6 @@ namespace RssReader.Model
         public List<FeedModel> FeedsList { get; } = new List<FeedModel>();
         public List<FilterModel> FiltersList { get; private set; } = new List<FilterModel>();
 
-        //public ObservableCollection<NewsModel> NewsList { get; private set; } =
-        //    new ObservableCollection<NewsModel>();
-
         // Public
 
         public UserModel(string name, int threadsCount)

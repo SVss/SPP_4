@@ -6,28 +6,21 @@ namespace ThreadPool
 {
     public class ExtThreadPool: IDisposable
     {
-        private readonly ActionQueueAsync _queue;
-        private readonly List<Thread> _workers;
-        private bool _disposed = false;
+        private readonly Queue<Action> _queue;
+        private readonly List<Thread> _threads;
 
-        #region Public
+        private readonly object _sync = new object();
 
-        /// <summary>
-        /// Create thread pool with <c>threadsCount</c> worker threads.
-        /// </summary>
-        /// <param name="threadsCount"></param>
+        private const int StdTimeoutMs = 50;
+
+        // Public
+
         public ExtThreadPool(int threadsCount)
         {
-            _queue = new ActionQueueAsync();
-            _workers = new List<Thread>(threadsCount);
+            _queue = new Queue<Action>();
+            _threads = new List<Thread>();
 
-            for (var i = 0; i < threadsCount; ++i)
-            {
-                var worker = new Thread(WorkerBody);
-                _workers.Add(worker);
-
-                worker.Start(_queue);
-            }
+            AddThreads(threadsCount);
         }
 
         ~ExtThreadPool()
@@ -35,75 +28,106 @@ namespace ThreadPool
             Dispose(false);
         }
 
-        /// <summary>
-        /// Add task to processing queue.
-        /// </summary>
-        /// <param name="task">Task to be enqueued.</param>
-        /// <exception cref="ObjectDisposedException"></exception>
         public void EnqueueTask(Action task)
         {
-            if (_disposed)
-            {
-                throw new ObjectDisposedException("Can't enqueue task to disposed ExtThreadPool queue");
-            }
+            if (task == null)
+                return;
 
-            _queue.Enqueue(task);
+            lock (_sync)
+            {
+                _queue.Enqueue(task);
+                Monitor.Pulse(_sync);
+            }
         }
 
-        /// <summary>
-        /// Clear processing queue.
-        /// Worker threads that already got tasks to process won't stop.
-        /// </summary>
+        public void Reinit(int threadsCount)
+        {
+            if (threadsCount > _threads.Count)
+            {
+                AddThreads(threadsCount - _threads.Count);
+            }
+            else if (threadsCount < _threads.Count)
+            {
+                StopThreads();
+                AddThreads(threadsCount);
+            }
+        }
+
         public void ClearQueue()
         {
-            _queue.Clear();
+            lock (_queue)
+            {
+                _queue.Clear();
+            }
         }
 
         public void Dispose()
         {
-            if (_disposed)
-                return;
-
             Dispose(true);
             GC.SuppressFinalize(this);
         }
 
-        #endregion
-
-        #region Internals
+        // Internals
 
         private void Dispose(bool safe)
         {
-            _queue.Clear();
-
-            _disposed = true;
-            _queue.Release();
-
-            foreach (Thread worker in _workers)
-            {
-                worker.Join();
-            }
+            StopThreads();
         }
 
-        private void WorkerBody(object actionQueue)
+        private void StopThreads()
         {
-            try
+            lock (_sync)
             {
-                var queue = actionQueue as ActionQueueAsync;
-                while (!_disposed)
+                foreach (Thread thread in _threads)
                 {
-                    Action task = queue.Dequeue();
-                    if (!_disposed)
-                    {
-                        task?.Invoke();
-                    }
+                    _queue.Enqueue(null);
+                    Monitor.Pulse(_sync);
                 }
             }
-            catch (ThreadAbortException)
+
+            foreach (Thread thread in _threads)
             {
-                Thread.ResetAbort();
+                thread.Join(StdTimeoutMs);
+            }
+
+            _threads.Clear();
+        }
+
+        private void AddThreads(int n)
+        {
+            for (int i = 0; i < n; ++i)
+            {
+                var thread = new Thread(WorkerCycle);
+                thread.IsBackground = true;
+
+                _threads.Add(thread);
+                thread.Start();
             }
         }
-        #endregion
+        
+        private Action DequeueTask()
+        {
+            lock (_sync)
+            {
+                while (_queue.Count == 0)
+                {
+                    Monitor.Wait(_sync);
+                }
+                Action result = _queue.Dequeue();
+                return result;
+            }
+        }
+
+        private void WorkerCycle()
+        {
+            while (true)
+            {
+                var task = DequeueTask();
+                if (task == null)
+                    break;
+
+                task.Invoke();
+            }
+        }
     }
 }

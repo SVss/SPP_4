@@ -1,10 +1,10 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 using RssReader.Model;
 using RssReader.Utils;
+using RssReader.View.Dialogs;
 
 namespace RssReader.ViewModel
 {
@@ -64,6 +64,9 @@ namespace RssReader.ViewModel
             // Main Window
         public RelayCommand UpdateNewsCommand { get; }
 
+        public RelayCommand AddFeedCommand { get; }
+        public RelayCommand RemoveFeedCommand { get; }
+
         public RelayCommand UnselectAllFeedsCommand { get; }
         public RelayCommand SelectAllFeedsCommand { get; }
         public RelayCommand SwitchSelectedFeedCommand { get; }
@@ -90,6 +93,9 @@ namespace RssReader.ViewModel
 
             // commands
             UpdateNewsCommand = new RelayCommand(UpdateNews, CanUpdateNews);
+
+            AddFeedCommand = new RelayCommand(AddFeed);
+            RemoveFeedCommand = new RelayCommand(RemoveFeed, o => SelectedFeed != null);
 
             UnselectAllFeedsCommand = new RelayCommand(UnselectAllFeeds);
             SelectAllFeedsCommand = new RelayCommand(SelectAllFeeds);
@@ -121,6 +127,29 @@ namespace RssReader.ViewModel
         {
             return IsReady;
         }
+
+
+        private void AddFeed(object obj)
+        {
+            var f = new FeedViewModel(new FeedModel("about:blank"));
+
+            var dialog = new AddFeedDialog(f);
+            bool? res = dialog.ShowDialog();
+
+            if (!((res == null) || !res.Value))
+            {
+                FeedsList.Add(f);
+                _model.AddFeed(f.GetModel());
+            }
+        }
+
+        private void RemoveFeed(object obj)
+        {
+            var f = SelectedFeed as FeedViewModel;
+            FeedsList.Remove(f);
+            _model.RemoveFeed(f.GetModel());
+        }
+
 
         private void UnselectAllFeeds(object args)
         {

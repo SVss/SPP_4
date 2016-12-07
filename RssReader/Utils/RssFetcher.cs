@@ -16,9 +16,12 @@ namespace RssReader.Utils
             {
                 doc.Load(reader);
             }
-            catch (System.Net.WebException)
+            catch (Exception ex)
             {
-                return null;
+                if (ex is System.Net.WebException || ex is System.NotSupportedException)
+                    return null;
+
+                throw;
             }
 
             var result = new List<NewsModel>();

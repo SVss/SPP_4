@@ -17,64 +17,78 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="0">
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
+        <GroupBox Grid.Column="0" Header="Feeds" BorderThickness="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-            <ListView Grid.Row="0" Margin="3" SelectionMode="Single">
-                <ListView.InputBindings>
-                    <KeyBinding Key="Space">
-                        <KeyBinding.Command>
-                            <Binding Path="SwitchSelectedFeedCommand"/>
-                        </KeyBinding.Command>
-                    </KeyBinding>
-                </ListView.InputBindings>
-                <ListView.SelectedItem>
-                    <Binding Path="SelectedFeed" Mode="TwoWay"></Binding>
-                </ListView.SelectedItem>
-                <ListView.ItemsSource>
-                    <Binding Path="FeedsList"/>
-                </ListView.ItemsSource>
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <views:FeedView />
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-            <Grid Grid.Row="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-
-                <Button Grid.Column="0" Margin="5 2 2.5 0">
-                    <Button.Command>
-                        <Binding Path="SelectAllFeedsCommand"/>
-                    </Button.Command>
-
-                    <TextBlock>All</TextBlock>
+                <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button HorizontalAlignment="Center" Width="20" Margin="3"
+                        Command="{Binding Path=AddFeedCommand}">
+                    <Button.Content>+</Button.Content>
                 </Button>
-                <Button Grid.Column="1" Margin="2.5 2 5 0">
+                <Button HorizontalAlignment="Center" Width="20" Margin="3"
+                        Command="{Binding Path=RemoveFeedCommand}">
+                    <Button.Content>-</Button.Content>
+                </Button>
+                </StackPanel>
+
+                <ListView Grid.Row="1" Margin="3" SelectionMode="Single">
+                    <ListView.InputBindings>
+                        <KeyBinding Key="Space">
+                            <KeyBinding.Command>
+                                <Binding Path="SwitchSelectedFeedCommand"/>
+                            </KeyBinding.Command>
+                        </KeyBinding>
+                    </ListView.InputBindings>
+                    <ListView.SelectedItem>
+                        <Binding Path="SelectedFeed" Mode="TwoWay"></Binding>
+                    </ListView.SelectedItem>
+                    <ListView.ItemsSource>
+                        <Binding Path="FeedsList"/>
+                    </ListView.ItemsSource>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <views:FeedView />
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button Grid.Column="0" Margin="5 2 2.5 0">
+                        <Button.Command>
+                            <Binding Path="SelectAllFeedsCommand"/>
+                        </Button.Command>
+
+                        <TextBlock>All</TextBlock>
+                    </Button>
+                    <Button Grid.Column="1" Margin="2.5 2 5 0">
+                        <Button.Command>
+                            <Binding Path="UnselectAllFeedsCommand"/>
+                        </Button.Command>
+
+                        <TextBlock>None</TextBlock>
+                    </Button>
+                </Grid>
+                <Button Grid.Row="3" Margin="5">
                     <Button.Command>
-                        <Binding Path="UnselectAllFeedsCommand"/>
+                        <Binding Path="UpdateNewsCommand"/>
                     </Button.Command>
 
-                    <TextBlock>None</TextBlock>
+                    <TextBlock>Update</TextBlock>
                 </Button>
             </Grid>
-            <Button Grid.Row="2" Margin="5">
-                <Button.Command>
-                    <Binding Path="UpdateNewsCommand"/>
-                </Button.Command>
-
-                <TextBlock>Update</TextBlock>
-            </Button>
-        </Grid>
-
-        <Grid Grid.Column="1">
+        </GroupBox>
+        <GroupBox Grid.Column="1" Header="News">
+            <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition></RowDefinition>
@@ -101,8 +115,11 @@
                 </ListView.ItemTemplate>
             </ListView>
         </Grid>
-        
-        <views:NewsView Grid.Column="2" DataContext="{Binding ElementName=NewsList, Path=SelectedItem}"/>
+        </GroupBox>
+
+        <GroupBox Grid.Column="2" Header="Details">
+            <views:NewsView DataContext="{Binding ElementName=NewsList, Path=SelectedItem}"/>
+        </GroupBox>
 
     </Grid>
 </UserControl>

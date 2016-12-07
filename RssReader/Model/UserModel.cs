@@ -83,6 +83,16 @@ namespace RssReader.Model
             this._threadsCount = threadsCount;
         }
 
+        public void AddFeed(FeedModel feed)
+        {
+            FeedsList.Add(feed);
+        }
+
+        public void RemoveFeed(FeedModel feed)
+        {
+            FeedsList.Remove(feed);
+        }
+
         public void UpdateNews(ObservableCollection<NewsViewModel> newsList)
         {
             newsList.Clear();
@@ -233,5 +243,6 @@ namespace RssReader.Model
             _userThreadPool.Dispose();
             _userThreadPool = null;
         }
+
     }
 }

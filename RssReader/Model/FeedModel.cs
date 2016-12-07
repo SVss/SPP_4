@@ -31,6 +31,17 @@ namespace RssReader.Model
 
         // Public
 
+        public FeedModel(string linkPath)
+        {
+            Uri result;
+            if (!Uri.TryCreate(linkPath, UriKind.Absolute, out result))
+            {
+                throw new ArgumentException();
+            }
+
+            Link = result;
+        }
+
         public static FeedModel FromXmlElement(XmlElement xe)
         {
             if (xe.Name != ConfigConsts.ChannelTag)
@@ -68,17 +79,7 @@ namespace RssReader.Model
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        
-        private FeedModel(string linkPath)
-        {
-            Uri result;
-            if (!Uri.TryCreate(linkPath, UriKind.Absolute, out result))
-            {
-                throw new ArgumentException();
-            }
 
-            Link = result;
-        }
     }
     
 }

@@ -39,13 +39,36 @@ namespace RssReader.ViewModel
 
         public FeedStatus Status => _model.Status;
 
+        // Commands
+        public RelayCommand AddFeedCommand { get; }
+
         // Public
 
         public FeedViewModel(FeedModel model)
         {
             this._model = model;
             model.PropertyChanged += ModelOnPropertyChanged;
+
+            AddFeedCommand = new RelayCommand(AddFeed, CanAddFeed);
         }
+
+        public FeedModel GetModel()
+        {
+            return _model;
+        }
+
+        // Internals
+
+        private void AddFeed(object obj)
+        {
+            // nop
+        }
+
+        private bool CanAddFeed(object arg)
+        {
+            return !string.IsNullOrEmpty(Link);
+        }
+
 
         private void ModelOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
         {

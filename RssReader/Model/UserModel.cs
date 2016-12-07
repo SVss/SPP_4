@@ -33,7 +33,8 @@ namespace RssReader.Model
                 bool result = true;
                 for (int i = 0; result && (i < FeedsList.Count); ++i)
                 {
-                    result &= FeedsList[i].IsReady;
+                    result &= ((FeedsList[i].Status == FeedStatus.Error) || 
+                        (FeedsList[i].Status == FeedStatus.Ready));
                 }
                 return result;
             }
@@ -57,10 +58,12 @@ namespace RssReader.Model
             
             foreach (FeedModel feed in FeedsList)
             {
+                feed.Status = FeedStatus.Ready;
+
                 if (!feed.IsShown)
                     continue;
 
-                feed.IsReady = false;
+                feed.Status = FeedStatus.Loading;
 
                 _userThreadPool.EnqueueTask(() =>
                 {
@@ -69,11 +72,11 @@ namespace RssReader.Model
                     if (result == null)
                     {
                         ErrorOccured = true;
-                        feed.IsReady = true;
+                        feed.Status = FeedStatus.Error;
                     }
                     else
                     {
-                        // to add items in observable-collection's dispatcher thread:
+                        // to add items in observable-collection's dispatcher thread
                         _context.Send((x) =>
                         {
                             foreach (var news in result)
@@ -88,7 +91,7 @@ namespace RssReader.Model
                                 if (isShown)
                                     newsList.Add(res);
                             }
-                            feed.IsReady = true;
+                            feed.Status = FeedStatus.Ready;
 
                         }, null);
                     }

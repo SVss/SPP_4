@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using RssReader.Model;
+using RssReader.Utils;
 
 namespace RssReader.ViewModel
 {
@@ -36,7 +37,7 @@ namespace RssReader.ViewModel
             }
         }
 
-        public bool IsReady => _model.IsReady;
+        public FeedStatus Status => _model.Status;
 
         // Public
 
@@ -48,7 +49,7 @@ namespace RssReader.ViewModel
 
         private void ModelOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
         {
-            OnPropertyChanged("IsReady");
+            OnPropertyChanged("Status");
         }
     }
 }

@@ -8,22 +8,22 @@ namespace RssReader.Model
 {
     public class FeedModel: INotifyPropertyChanged
     {
-        private bool _isReady = true;
+        private FeedStatus _status = FeedStatus.Ready;
 
         public Uri Link { get; set; }
         public bool IsShown { get; set; } = true;
 
-        public bool IsReady
+        public FeedStatus Status
         {
             get
             {
-                return _isReady;
+                return _status;
             }
             set
             {
-                if (_isReady != value)
+                if (_status != value)
                 {
-                    _isReady = value;
+                    _status = value;
                     OnPropertyChanged();
                 }
             }
@@ -80,4 +80,5 @@ namespace RssReader.Model
             Link = result;
         }
     }
+    
 }

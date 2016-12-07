@@ -80,6 +80,7 @@
     <Compile Include="BadXmlException.cs" />
     <Compile Include="Model\AppModel.cs" />
     <Compile Include="Model\FeedModel.cs" />
+    <Compile Include="Utils\FeedStatus.cs" />
     <Compile Include="Model\FilterModel.cs" />
     <Compile Include="Model\NewsModel.cs" />
     <Compile Include="Model\UserModel.cs" />

@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:RssReader.View"
+             xmlns:utils="clr-namespace:RssReader.Utils"
              mc:Ignorable="d" 
              d:DesignHeight="20">
     <Grid>
@@ -26,8 +27,11 @@
                 <Style TargetType="TextBlock">
                     <Setter Property="Text" Value="{Binding Path=Link}"/>
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsReady}" Value="False">
+                        <DataTrigger Binding="{Binding Status}" Value="{x:Static utils:FeedStatus.Loading}">
                             <Setter Property="Text" Value="{Binding StringFormat={}{0} (Loading...), Path=Link}"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Status}" Value="{x:Static utils:FeedStatus.Error}">
+                            <Setter Property="Text" Value="{Binding StringFormat={}{0} (Error), Path=Link}"/>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>

@@ -24,7 +24,7 @@ namespace RssReader.Model
                 if (_isReady != value)
                 {
                     _isReady = value;
-                    OnPropertyChanged("IsReady");
+                    OnPropertyChanged();
                 }
             }
         }

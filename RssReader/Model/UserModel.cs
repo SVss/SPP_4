@@ -18,6 +18,8 @@ namespace RssReader.Model
         private readonly object _sync = new object();
         private readonly SynchronizationContext _context = SynchronizationContext.Current;
 
+        public bool ErrorOccured = false;
+
         public string Name { get; set; }
         public int ThreadsCount { get; set; }
 
@@ -53,7 +55,7 @@ namespace RssReader.Model
             newsList.Clear();
             _userThreadPool.ClearQueue();
             
-            foreach (var feed in FeedsList)
+            foreach (FeedModel feed in FeedsList)
             {
                 if (!feed.IsShown)
                     continue;
@@ -64,24 +66,32 @@ namespace RssReader.Model
                 {
                     IList<NewsModel> result = RssFetcher.FetchNews(feed.Link);
 
-                    // to add items in observable-collection's dispatcher thread:
-                    _context.Send((x) =>
+                    if (result == null)
                     {
-                        foreach (var news in result)
-                        {
-                            var res = new NewsViewModel(news);
-
-                            bool isShown = true;
-                            foreach (FilterModel filter in FiltersList)
-                            {
-                                isShown &= filter.Check(res.FullText);
-                            }
-                            if (isShown)
-                                newsList.Add(res);
-                        }
+                        ErrorOccured = true;
                         feed.IsReady = true;
-                        
-                    }, null);
+                    }
+                    else
+                    {
+                        // to add items in observable-collection's dispatcher thread:
+                        _context.Send((x) =>
+                        {
+                            foreach (var news in result)
+                            {
+                                var res = new NewsViewModel(news);
+
+                                bool isShown = true;
+                                foreach (FilterModel filter in FiltersList)
+                                {
+                                    isShown &= filter.Check(res.FullText);
+                                }
+                                if (isShown)
+                                    newsList.Add(res);
+                            }
+                            feed.IsReady = true;
+
+                        }, null);
+                    }
                 });
             }
 

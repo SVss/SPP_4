@@ -11,58 +11,68 @@ namespace RssReader.Utils
         {
             XmlTextReader reader = new XmlTextReader(linkPath.ToString());
             XmlDocument doc = new XmlDocument();
-            doc.Load(reader);
 
-            var result = new List<NewsModel>();
+            List<NewsModel> result = null;
 
-            var xe = doc.FirstChild;
-            if (xe is XmlDeclaration)
-                xe = xe.NextSibling;
-
-            if ((xe == null) || (xe.Name != RssConstants.RssTag))
+            try
             {
-                return result;
-            }
+                doc.Load(reader);
+            
+                result = new List<NewsModel>();
 
-            xe = xe.FirstChild;
-            if ((xe == null) || (xe.Name != RssConstants.ChannelTag))
-            {
-                return result;
-            }
+                var xe = doc.FirstChild;
+                if (xe is XmlDeclaration)
+                    xe = xe.NextSibling;
 
-            foreach (XmlElement itm in xe.ChildNodes)
-            {
-                string caption = string.Empty,
-                        descrition = string.Empty,
-                        link = string.Empty;
-
-                if (itm.Name == RssConstants.ItemTag)
+                if ((xe == null) || (xe.Name != RssConstants.RssTag))
                 {
-                    foreach (XmlElement entry in itm.ChildNodes)
-                    {
-                        if (entry.Name == RssConstants.TitleTag)
-                        {
-                            caption = entry.InnerText;
-                        }
-                        else if (entry.Name == RssConstants.DescriptionTag)
-                        {
-                            foreach (XmlNode child in entry.ChildNodes)
-                            {
-                                if (child.NodeType == XmlNodeType.Text ||
-                                    child.NodeType == XmlNodeType.CDATA)
-                                {
-                                    descrition += child.Value;
-                                }
-                            }
-                            descrition = entry.InnerText;
-                        }
-                        else if (entry.Name == RssConstants.LinkTag)
-                        {
-                            link = entry.InnerText;
-                        }
-                    }
-                    result.Add(new NewsModel(caption, descrition, link));
+                    return result;
                 }
+
+                xe = xe.FirstChild;
+                if ((xe == null) || (xe.Name != RssConstants.ChannelTag))
+                {
+                    return result;
+                }
+
+                foreach (XmlElement itm in xe.ChildNodes)
+                {
+                    string caption = string.Empty,
+                            descrition = string.Empty,
+                            link = string.Empty;
+
+                    if (itm.Name == RssConstants.ItemTag)
+                    {
+                        foreach (XmlElement entry in itm.ChildNodes)
+                        {
+                            if (entry.Name == RssConstants.TitleTag)
+                            {
+                                caption = entry.InnerText;
+                            }
+                            else if (entry.Name == RssConstants.DescriptionTag)
+                            {
+                                foreach (XmlNode child in entry.ChildNodes)
+                                {
+                                    if (child.NodeType == XmlNodeType.Text ||
+                                        child.NodeType == XmlNodeType.CDATA)
+                                    {
+                                        descrition += child.Value;
+                                    }
+                                }
+                                descrition = entry.InnerText;
+                            }
+                            else if (entry.Name == RssConstants.LinkTag)
+                            {
+                                link = entry.InnerText;
+                            }
+                        }
+                        result.Add(new NewsModel(caption, descrition, link));
+                    }
+                }
+            }
+            catch (System.Net.WebException)
+            {
+                result = null;
             }
             return result;
         }

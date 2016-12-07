@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:RssReader.View.Dialogs"
         xmlns:viewModels="clr-namespace:RssReader.ViewModel"
         mc:Ignorable="d"
-        Title="Users" Height="300" Width="400" ShowInTaskbar="False">
+        Title="Users" Height="300" Width="400" ShowInTaskbar="False" Topmost="True">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
@@ -22,7 +22,7 @@
                 <Binding Path="UsersList"></Binding>
             </ListBox.ItemsSource>
             <ListBox.SelectedItem>
-                <Binding Path="SelectedUsersConfigDialog"/>
+                <Binding Path="SelectedUsersConfigDialog" Mode="TwoWay"/>
             </ListBox.SelectedItem>
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type viewModels:UserViewModel}">

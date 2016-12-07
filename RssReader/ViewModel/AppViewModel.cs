@@ -147,14 +147,22 @@ namespace RssReader.ViewModel
 
         private void CloseCurrentUser(object obj)
         {
-            OpenedUsersList.Remove(SelectedUserMain as UserViewModel);
-            if (OpenedUsersList.Count > 0)
+            CloseUser(SelectedUserMain);
+        }
+
+        private void CloseUser(object user)
+        {
+            OpenedUsersList.Remove(user as UserViewModel);
+            if (user == SelectedUserMain)
             {
-                SelectedUserMain = OpenedUsersList.First();
-            }
-            else
-            {
-                SelectedUserMain = null;
+                if (OpenedUsersList.Count > 0)
+                {
+                    SelectedUserMain = OpenedUsersList.First();
+                }
+                else
+                {
+                    SelectedUserMain = null;
+                }
             }
         }
 
@@ -207,8 +215,16 @@ namespace RssReader.ViewModel
 
         private void RemoveUser(object args)
         {
-            // TODO
-            MessageBox.Show("Remove user dialog.");
+            var answ = MessageBox.Show("Do you really want to remove selected user?", "Remove user", MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
+            if (answ == MessageBoxResult.Yes)
+            {
+                CloseUser(SelectedUsersConfigDialog);
+                var userToRemove = SelectedUsersConfigDialog as UserViewModel;
+                UsersList.Remove(userToRemove);
+                _model.RemoveUser(userToRemove.GetModel());
+                SelectedUsersConfigDialog = null;
+            }
         }
 
         private void ShowEditUserDialog(object obj)

@@ -77,10 +77,11 @@ namespace RssReader.Model
                 if (!feed.IsShown)
                     continue;
 
-                feed.Status = FeedStatus.Loading;
+                feed.Status = FeedStatus.Waiting;
 
                 _userThreadPool.EnqueueTask(() =>
                 {
+                    feed.Status = FeedStatus.Loading;
                     IList<NewsModel> result = RssFetcher.FetchNews(feed.Link);
 
                     if (result == null)

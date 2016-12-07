@@ -27,6 +27,9 @@
                 <Style TargetType="TextBlock">
                     <Setter Property="Text" Value="{Binding Path=Link}"/>
                     <Style.Triggers>
+                        <DataTrigger Binding="{Binding Status}" Value="{x:Static utils:FeedStatus.Waiting}">
+                            <Setter Property="Text" Value="{Binding StringFormat={}{0} (Waiting), Path=Link}"/>
+                        </DataTrigger>
                         <DataTrigger Binding="{Binding Status}" Value="{x:Static utils:FeedStatus.Loading}">
                             <Setter Property="Text" Value="{Binding StringFormat={}{0} (Loading...), Path=Link}"/>
                         </DataTrigger>

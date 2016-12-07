@@ -19,12 +19,19 @@
                 <Binding Path="IsShown" Mode="TwoWay"/>
             </CheckBox.IsChecked>
         </CheckBox>
-        
+
         <TextBlock Grid.Column="1" VerticalAlignment="Center"
                    HorizontalAlignment="Left">
-            <TextBlock.Text>
-                <Binding Path="Link" Mode="OneWay"/>
-            </TextBlock.Text>
+            <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                    <Setter Property="Text" Value="{Binding Path=Link}"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsReady}" Value="False">
+                            <Setter Property="Text" Value="{Binding StringFormat={}{0} (Loading...), Path=Link}"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
         </TextBlock>
     </Grid>
 </UserControl>

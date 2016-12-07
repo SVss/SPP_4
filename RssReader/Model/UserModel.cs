@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Threading;
+using System.Windows;
 using System.Xml;
 using RssReader.Utils;
 using RssReader.ViewModel;
@@ -9,7 +12,7 @@ using ThreadPool;
 
 namespace RssReader.Model
 {
-    public class UserModel
+    public class UserModel: INotifyPropertyChanged
     {
         private ExtThreadPool _userThreadPool;
         private readonly object _sync = new object();
@@ -21,24 +24,42 @@ namespace RssReader.Model
         public List<FeedModel> FeedsList { get; } = new List<FeedModel>();
         public List<FilterModel> FiltersList { get; private set; } = new List<FilterModel>();
 
+        public bool IsReady
+        {
+            get
+            {
+                bool result = true;
+                for (int i = 0; result && (i < FeedsList.Count); ++i)
+                {
+                    result &= FeedsList[i].IsReady;
+                }
+                return result;
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
         // Public
 
         public UserModel(string name, int threadsCount)
         {
             this.Name = name;
             this.ThreadsCount = threadsCount;
+            _userThreadPool = new ExtThreadPool(threadsCount);
         }
 
         public void UpdateNews(ObservableCollection<NewsViewModel> newsList)
         {
             newsList.Clear();
             _userThreadPool.ClearQueue();
-
+            
             foreach (var feed in FeedsList)
             {
                 if (!feed.IsShown)
                     continue;
-                
+
+                feed.IsReady = false;
+
                 _userThreadPool.EnqueueTask(() =>
                 {
                     IList<NewsModel> result = RssFetcher.FetchNews(feed.Link);
@@ -58,9 +79,12 @@ namespace RssReader.Model
                             if (isShown)
                                 newsList.Add(res);
                         }
+                        feed.IsReady = true;
+                        
                     }, null);
                 });
             }
+
         }
 
         public void EndUpdating()
@@ -101,7 +125,9 @@ namespace RssReader.Model
 
             foreach (XmlElement channel in child.ChildNodes)
             {
-                result.FeedsList.Add(FeedModel.FromXmlElement(channel));
+                var feedModel = FeedModel.FromXmlElement(channel);
+                feedModel.PropertyChanged += result.FeedModelOnPropertyChanged;
+                result.FeedsList.Add(feedModel);
             }
 
             // Read filters
@@ -115,8 +141,6 @@ namespace RssReader.Model
             {
                 result.FiltersList.Add(FilterModel.FromXmlElement(filter));
             }
-
-            result._userThreadPool = new ExtThreadPool(threadsCount);
 
             return result;
         }
@@ -147,5 +171,16 @@ namespace RssReader.Model
             return result;
         }
 
+        // Internals
+
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void FeedModelOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+        {
+            OnPropertyChanged("IsReady");
+        }
     }
 }

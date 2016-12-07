@@ -1,4 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Windows.Input;
 using RssReader.Model;
 using RssReader.Utils;
 
@@ -8,10 +11,10 @@ namespace RssReader.ViewModel
     {
         private readonly UserModel _model;
 
-        public ObservableCollection<FeedViewModel> FeedsList { get; private set; } =
+        public ObservableCollection<FeedViewModel> FeedsList { get; } =
             new ObservableCollection<FeedViewModel>();
 
-        public ObservableCollection<NewsViewModel> NewsList { get; private set; }=
+        public ObservableCollection<NewsViewModel> NewsList { get; } =
             new ObservableCollection<NewsViewModel>();
 
         public string NewsCount => NewsList.Count.ToString();
@@ -29,6 +32,8 @@ namespace RssReader.ViewModel
             }
         }
 
+        public bool IsReady => _model.IsReady;
+
         // Commands
 
         public RelayCommand UpdateNewsCommand { get; }
@@ -42,20 +47,26 @@ namespace RssReader.ViewModel
         public UserViewModel(UserModel model)
         {
             this._model = model;
+            model.PropertyChanged += ModelOnPropertyChanged;
+
             foreach (FeedModel feed in _model.FeedsList)
             {
                 this.FeedsList.Add(new FeedViewModel(feed));
             }
 
-
             NewsList.CollectionChanged += (sender, args) => { OnPropertyChanged("NewsCount"); };
 
             // commands
-            UpdateNewsCommand = new RelayCommand(UpdateNews);   // TODO: disable button
+            UpdateNewsCommand = new RelayCommand(UpdateNews, CanUpdateNews);
 
             UnselectAllFeedsCommand = new RelayCommand(UnselectAllFeeds);
             SelectAllFeedsCommand = new RelayCommand(SelectAllFeeds);
             SwitchSelectedFeedCommand = new RelayCommand(SwitchSelectedFeed);
+        }
+
+        public void EndUpdating()
+        {
+            _model.EndUpdating();
         }
 
         // Internals
@@ -90,9 +101,15 @@ namespace RssReader.ViewModel
             }
         }
 
-        public void EndUpdating()
+        private bool CanUpdateNews(object o)
         {
-            _model.EndUpdating();
+            return IsReady;
         }
+
+        private void ModelOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+        {
+            CommandManager.InvalidateRequerySuggested();
+        }
+
     }
 }

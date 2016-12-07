@@ -1,27 +1,35 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Xml;
 using RssReader.Utils;
 
 namespace RssReader.Model
 {
-    public class FeedModel
+    public class FeedModel: INotifyPropertyChanged
     {
+        private bool _isReady = true;
+
         public Uri Link { get; set; }
         public bool IsShown { get; set; } = true;
 
-        // Public
-
-        public FeedModel(string linkPath)
+        public bool IsReady
         {
-            Uri result;
-            if (!Uri.TryCreate(linkPath, UriKind.Absolute, out result))
+            get
             {
-                throw new ArgumentException();
+                return _isReady;
             }
-
-            Link = result;
+            set
+            {
+                if (_isReady != value)
+                {
+                    _isReady = value;
+                    OnPropertyChanged("IsReady");
+                }
+            }
         }
+
+        // Public
 
         public static FeedModel FromXmlElement(XmlElement xe)
         {
@@ -50,6 +58,26 @@ namespace RssReader.Model
             XmlElement result = document.CreateElement(ConfigConsts.ChannelTag);
             result.InnerText = Link.ToString();
             return result;
+        }
+        
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        // Internals
+
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        
+        private FeedModel(string linkPath)
+        {
+            Uri result;
+            if (!Uri.TryCreate(linkPath, UriKind.Absolute, out result))
+            {
+                throw new ArgumentException();
+            }
+
+            Link = result;
         }
     }
 }

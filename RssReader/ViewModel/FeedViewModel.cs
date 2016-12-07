@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using RssReader.Model;
 
 namespace RssReader.ViewModel
@@ -35,11 +36,19 @@ namespace RssReader.ViewModel
             }
         }
 
+        public bool IsReady => _model.IsReady;
+
         // Public
 
         public FeedViewModel(FeedModel model)
         {
             this._model = model;
+            model.PropertyChanged += ModelOnPropertyChanged;
+        }
+
+        private void ModelOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+        {
+            OnPropertyChanged("IsReady");
         }
     }
 }

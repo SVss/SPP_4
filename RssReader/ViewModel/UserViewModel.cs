@@ -11,6 +11,8 @@ namespace RssReader.ViewModel
     {
         private readonly UserModel _model;
 
+        public string ThreadsCount => _model.ThreadsCount.ToString();
+
         public ObservableCollection<FeedViewModel> FeedsList { get; } =
             new ObservableCollection<FeedViewModel>();
 

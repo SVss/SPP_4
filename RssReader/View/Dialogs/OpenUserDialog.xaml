@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:RssReader.View.Dialogs"
         xmlns:viewModels="clr-namespace:RssReader.ViewModel"
         mc:Ignorable="d"
-        Title="Open user" Height="350" Width="250" ShowInTaskbar="False" ResizeMode="NoResize">
+        Title="Open user" Height="350" Width="250" ShowInTaskbar="False">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
@@ -42,7 +42,7 @@
                 Padding="20 0 20 0" Margin="3"
                 Command="{Binding Path=OpenUserCommand}"
                 Click="CloseClick">
-                <Button.Content>Ok</Button.Content>
+                <Button.Content>Open</Button.Content>
             </Button>
 
             <Button Grid.Column="1"

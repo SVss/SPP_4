@@ -4,8 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RssReader.View.Dialogs"
+        xmlns:viewModels="clr-namespace:RssReader.ViewModel"
         mc:Ignorable="d"
-        Title="Users" Height="300" Width="300">
+        Title="Users" Height="300" Width="400" ShowInTaskbar="False">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
@@ -20,26 +21,46 @@
             <ListBox.ItemsSource>
                 <Binding Path="UsersList"></Binding>
             </ListBox.ItemsSource>
+            <ListBox.SelectedItem>
+                <Binding Path="SelectedUsersConfigDialog"/>
+            </ListBox.SelectedItem>
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="{x:Type viewModels:UserViewModel}">
+                    <TextBlock>
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}{0} (threads count: {1})">
+                                <Binding Path="Name"/>
+                                <Binding Path="ThreadsCount"/>
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
         </ListBox>
         
         <StackPanel Grid.Row="0" Grid.Column="1">
-            <Button HorizontalAlignment="Center" Width="20" Margin="3">
+            <Button HorizontalAlignment="Center" Width="20" Margin="3"
+                    Command="{Binding Path=AddUserCommand}">
                 <Button.Content>+</Button.Content>
             </Button>
-            <Button HorizontalAlignment="Center" Width="20" Margin="3">
+            <Button HorizontalAlignment="Center" Width="20" Margin="3"
+                    Command="{Binding Path=RemoveUserCommand}">
                 <Button.Content>-</Button.Content>
             </Button>
             <Separator/>
-            <Button HorizontalAlignment="Center" Margin="3" Padding="3 0 3 0">
+            <Button HorizontalAlignment="Center" Margin="3" Padding="3 0 3 0"
+                    Command="{Binding Path=EditUserCommand}">
                 <Button.Content>Edit</Button.Content>
             </Button>
         </StackPanel>
         
         <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" 
                 HorizontalAlignment="Center"
-                Padding="20 0 20 0" Margin="3">
+                Padding="20 0 20 0" Margin="3"
+                Click="CloseClick">
             <Button.Content>Close</Button.Content>
         </Button>
         
     </Grid>
 </Window>
+

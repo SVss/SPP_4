@@ -13,5 +13,10 @@ namespace RssReader.View.Dialogs
             InitializeComponent();
             DataContext = dataContext;
         }
+
+        private void CloseClick(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }

@@ -13,13 +13,52 @@ namespace RssReader.ViewModel
     public class AppViewModel: BaseViewModel
     {
         private readonly AppModel _model = new AppModel();
+        private object _selectedUserMain;
+        private object _selectedOpenUser;
+        private object _selectedUserConfig;
 
-        public object SelectedUserMain { get; set; }
+        public object SelectedUserMain
+        {
+            get { return _selectedUserMain; }
+            set
+            {
+                if (_selectedUserMain != value)
+                {
+                    _selectedUserMain = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public ObservableCollection<UserViewModel> OpenedUsersList { get; } =
             new ObservableCollection<UserViewModel>();
 
-        public object SelectedOpenUserDialog { get; set; }
-        public object SelectedUsersConfigDialog { get; set; }
+        public object SelectedOpenUserDialog
+        {
+            get { return _selectedOpenUser; }
+            set
+            {
+                if (_selectedOpenUser != value)
+                {
+                    _selectedOpenUser = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public object SelectedUsersConfigDialog
+        {
+            get { return _selectedUserConfig; }
+            set
+            {
+                if (_selectedUserConfig != value)
+                {
+                    _selectedUserConfig = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public ObservableCollection<UserViewModel> UsersList { get; } =
             new ObservableCollection<UserViewModel>();
         
@@ -51,14 +90,14 @@ namespace RssReader.ViewModel
             ExitCommand = new RelayCommand(CloseApplication);
 
             ShowOpenUserDialogCommand = new RelayCommand(ShowOpenUserDialog);
-            CloseUserCommand = new RelayCommand(CloseCurrentUser, o => SelectedUserMain != null);
+            CloseUserCommand = new RelayCommand(CloseCurrentUser, CanCloseCurrentUser);
             ShowUsersConfigDialogCommand = new RelayCommand(ShowUsersConfigDialog, CanOpenUsersConfig);
 
             OpenUserCommand = new RelayCommand(OpenUser, o => SelectedOpenUserDialog != null);
 
             AddUserCommand = new RelayCommand(AddUser);
-            RemoveUserCommand = new RelayCommand(RemoveUser);
-            EditUserCommand = new RelayCommand(ShowEditUserDialog);
+            RemoveUserCommand = new RelayCommand(RemoveUser, o => SelectedUsersConfigDialog != null);
+            EditUserCommand = new RelayCommand(ShowEditUserDialog, o => SelectedUsersConfigDialog != null);
 
             // configuration
 
@@ -133,13 +172,13 @@ namespace RssReader.ViewModel
                 OpenedUsersList.Add(SelectedOpenUserDialog as UserViewModel);
             }
             SelectedUserMain = SelectedOpenUserDialog;
-            OnPropertyChanged("SelectedUserMain");
         }
 
 
         private void ShowUsersConfigDialog(object obj)
         {
-            MessageBox.Show("Users config dialog.");
+            var dialog = new UsersConfigDialog(this);
+            dialog.ShowDialog();
         }
 
         private bool CanOpenUsersConfig(object o)
@@ -152,6 +191,11 @@ namespace RssReader.ViewModel
             return result;
         }
 
+        private bool CanCloseCurrentUser(object o)
+        {
+            return (SelectedUserMain != null) &&
+                (SelectedUserMain as UserViewModel).IsReady;
+        }
 
         // Users Config Dialog
 

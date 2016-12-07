@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 using RssReader.Model;
 
 namespace RssReader.ViewModel
@@ -6,6 +7,7 @@ namespace RssReader.ViewModel
     public class NewsViewModel: BaseViewModel
     {
         private const int ShortCaptionWidth = 103;
+
         private readonly NewsModel _model;
 
         public string Caption => _model.Caption;
@@ -32,6 +34,13 @@ namespace RssReader.ViewModel
         public NewsViewModel(NewsModel model)
         {
             this._model = model;
+        }
+
+        // Internals
+
+        private void OpenInBrowser(object args)
+        {
+            MessageBox.Show("Open in browser!");
         }
     }
 }

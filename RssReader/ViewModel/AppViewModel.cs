@@ -187,8 +187,9 @@ namespace RssReader.ViewModel
             {
                 OpenedUsersList.Add(u);
                 u.Open();
+
+                SelectedUserMain = SelectedOpenUserDialog;
             }
-            SelectedUserMain = SelectedOpenUserDialog;
         }
 
 
@@ -218,28 +219,44 @@ namespace RssReader.ViewModel
 
         private void AddUser(object args)
         {
-            // TODO
-            MessageBox.Show("Add user dialog.");
+            var u = new UserViewModel(new UserModel("", 0));
+
+            var dialog = new AddUserDialog(u);
+            bool? result = dialog.ShowDialog();
+
+            if (!((result == null) || (!result.Value)))
+            {
+                UsersList.Add(u);
+                _model.UsersList.Add(u.GetModel());
+            }
         }
 
         private void RemoveUser(object args)
         {
-            var answ = MessageBox.Show("Do you really want to remove selected user?", "Remove user", MessageBoxButton.YesNo,
-                MessageBoxImage.Question);
-            if (answ == MessageBoxResult.Yes)
+            if (SelectedUsersConfigDialog != null)
             {
-                CloseUser(SelectedUsersConfigDialog);
-                var userToRemove = SelectedUsersConfigDialog as UserViewModel;
-                UsersList.Remove(userToRemove);
-                _model.RemoveUser(userToRemove.GetModel());
-                SelectedUsersConfigDialog = null;
+                var answ = MessageBox.Show("Do you really want to remove selected user?", "Remove user",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question);
+                if (answ == MessageBoxResult.Yes)
+                {
+                    CloseUser(SelectedUsersConfigDialog);
+                    var userToRemove = SelectedUsersConfigDialog as UserViewModel;
+
+                    UsersList.Remove(userToRemove);
+                    _model.RemoveUser(userToRemove?.GetModel());
+                    SelectedUsersConfigDialog = null;
+                }
             }
         }
 
         private void ShowEditUserDialog(object obj)
         {
-            var dialog = new EditUserDialog(SelectedUsersConfigDialog as UserViewModel);
-            dialog.ShowDialog();
+            if (SelectedUsersConfigDialog != null)
+            {
+                var dialog = new EditUserDialog(SelectedUsersConfigDialog as UserViewModel);
+                dialog.ShowDialog();
+            }
         }
     }
 }

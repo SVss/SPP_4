@@ -17,9 +17,27 @@ namespace RssReader.Model
         private readonly object _sync = new object();
         private readonly SynchronizationContext _context = SynchronizationContext.Current;
 
+        private string _name;
         private int _threadsCount;
 
-        public string Name { get; set; }
+        public string Name
+        {
+            get
+            {
+                return _name;
+            }
+            set
+            {
+                if (!string.IsNullOrEmpty(value))
+                {
+                    if (value != _name)
+                    {
+                        _name = value;
+                        OnPropertyChanged();
+                    }
+                }
+            }
+        }
 
         public int ThreadsCount
         {
@@ -31,7 +49,7 @@ namespace RssReader.Model
                     if (value > 0)
                     {
                         _threadsCount = value;
-                        _userThreadPool.Reinit(_threadsCount);
+                        _userThreadPool?.Reinit(_threadsCount);
                         OnPropertyChanged();
                     }
                 }

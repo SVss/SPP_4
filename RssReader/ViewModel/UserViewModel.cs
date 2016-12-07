@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 using RssReader.Model;
@@ -70,6 +71,8 @@ namespace RssReader.ViewModel
             // EditUser Dialog
         public RelayCommand OpenFiltersDialogCommand { get; }
 
+            // AddUser Dialog
+        public RelayCommand AddUserCommand { get; }
 
         // Public
 
@@ -93,6 +96,8 @@ namespace RssReader.ViewModel
             SwitchSelectedFeedCommand = new RelayCommand(SwitchSelectedFeed);
 
             OpenFiltersDialogCommand = new RelayCommand(OpenFiltersDialog);
+
+            AddUserCommand = new RelayCommand(AddUser, CanAddUser);
         }
 
         public void Open()
@@ -110,6 +115,11 @@ namespace RssReader.ViewModel
         private void UpdateNews(object obj)
         {
             _model.UpdateNews(NewsList);
+        }
+
+        private bool CanUpdateNews(object o)
+        {
+            return IsReady;
         }
 
         private void UnselectAllFeeds(object args)
@@ -137,20 +147,24 @@ namespace RssReader.ViewModel
             }
         }
 
-        private bool CanUpdateNews(object o)
-        {
-            return IsReady;
-        }
-
         private void ModelOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
         {
             CommandManager.InvalidateRequerySuggested();
         }
 
-
         private void OpenFiltersDialog(object obj)
         {
             MessageBox.Show("Filters Dialog here");
+        }
+
+        private void AddUser(object obj)
+        {
+            // nop
+        }
+
+        private bool CanAddUser(object arg)
+        {
+            return (!string.IsNullOrEmpty(Name) && (ThreadsCount > 0));
         }
     }
 }

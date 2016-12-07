@@ -1,11 +1,11 @@
-﻿<Window x:Class="RssReader.View.Dialogs.EditUserDialog"
+﻿<Window x:Class="RssReader.View.Dialogs.AddUserDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RssReader.View.Dialogs"
         mc:Ignorable="d"
-        Title="Edit user" Height="129.644" Width="300" ResizeMode="NoResize" ShowInTaskbar="False">
+        Title="Add user" Height="129.644" Width="300" ResizeMode="NoResize" ShowInTaskbar="False">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
@@ -51,15 +51,16 @@
             <Button Grid.Column="0"
                 HorizontalAlignment="Center"
                 Padding="20 0 20 0" Margin="3"
-                Command="{Binding Path=OpenFiltersDialogCommand}">
-                <Button.Content>Filters...</Button.Content>
+                Command="{Binding Path=AddUserCommand}"
+                Click="AddClick">
+                <Button.Content>Add</Button.Content>
             </Button>
 
             <Button Grid.Column="1"
                 HorizontalAlignment="Center"
                 Padding="20 0 20 0" Margin="3"
                 Click="CloseClick">
-                <Button.Content>Close</Button.Content>
+                <Button.Content>Cancel</Button.Content>
             </Button>
         </Grid>
     </Grid>

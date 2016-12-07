@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using RssReader.Model;
+using RssReader.Utils;
 
 namespace RssReader.ViewModel
 {
@@ -29,18 +30,23 @@ namespace RssReader.ViewModel
 
         public bool IsVisible { get; set; } = true; // changed by Filters
 
+        // Commands
+
+        public RelayCommand OpenInBrowserCommand { get; }
+
         // Public
 
         public NewsViewModel(NewsModel model)
         {
             this._model = model;
+            OpenInBrowserCommand = new RelayCommand(OpenInBrowser);
         }
 
         // Internals
 
         private void OpenInBrowser(object args)
         {
-            MessageBox.Show("Open in browser!");
+            System.Diagnostics.Process.Start(Link.ToString());
         }
     }
 }

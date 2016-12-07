@@ -34,9 +34,9 @@
         <Button Grid.Row="2" Width="Auto" Margin="5"
                 HorizontalAlignment="Center">
             <Button.Command>
-                <Binding Path="OpenInBrowser"/>
+                <Binding Path="OpenInBrowserCommand"></Binding>
             </Button.Command>
-            
+
             <TextBlock>Open in browser</TextBlock>
         </Button>
     </Grid>

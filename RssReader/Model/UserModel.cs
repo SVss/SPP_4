@@ -93,7 +93,7 @@ namespace RssReader.Model
             FeedsList.Remove(feed);
         }
 
-        public void UpdateNews(ObservableCollection<NewsViewModel> newsList)
+        public void LoadNews(ObservableCollection<NewsViewModel> newsList)
         {
             newsList.Clear();
             _userThreadPool.ClearQueue();

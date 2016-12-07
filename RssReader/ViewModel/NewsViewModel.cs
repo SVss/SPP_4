@@ -6,7 +6,7 @@ namespace RssReader.ViewModel
 {
     public class NewsViewModel: BaseViewModel
     {
-        private const int ShortCaptionWidth = 103;
+        private const int ShortCaptionWidth = 53;
 
         private readonly NewsModel _model;
 
@@ -14,7 +14,7 @@ namespace RssReader.ViewModel
         public string Description => _model.Description;    // TODO: get rid of image / show it X)
         public string Link => _model.Link.ToString();
 
-        public string FullText => Caption + Environment.NewLine + Description;
+        public string FullText => Caption + Environment.NewLine + Environment.NewLine + Description;
 
         public object ShortCaption
         {

@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:RssReader.View.Dialogs"
         xmlns:viewModels="clr-namespace:RssReader.ViewModel"
         mc:Ignorable="d"
-        Title="Users" Height="300" Width="400" ShowInTaskbar="False">
+        Title="Users" Height="300" Width="400" ShowInTaskbar="False"
+        FontSize="15">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
@@ -39,17 +40,22 @@
         </ListBox>
         
         <StackPanel Grid.Row="0" Grid.Column="1">
-            <Button HorizontalAlignment="Center" Width="20" Margin="3"
+            <Button HorizontalAlignment="Center" Width="25" Margin="3"
                     Command="{Binding Path=AddUserCommand}">
                 <Button.Content>+</Button.Content>
             </Button>
-            <Button HorizontalAlignment="Center" Width="20" Margin="3"
+            <Button HorizontalAlignment="Center" Width="25" Margin="3"
                     Command="{Binding Path=RemoveUserCommand}">
                 <Button.Content>-</Button.Content>
             </Button>
             <Separator/>
-            <Button HorizontalAlignment="Center" Margin="3" Padding="3 0 3 0"
-                    Command="{Binding Path=EditUserCommand}">
+            <Button HorizontalAlignment="Center" Margin="3" Padding="5 0 5 0">
+                <Button.Command>
+                    <Binding Path="EditUserCommand"/>
+                </Button.Command>
+                <Button.CommandParameter>
+                    <Binding Path="SelectedUsersConfigDialog"/>
+                </Button.CommandParameter>
                 <Button.Content>Edit</Button.Content>
             </Button>
         </StackPanel>

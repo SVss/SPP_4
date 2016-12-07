@@ -7,7 +7,7 @@
         xmlns:views="clr-namespace:RssReader.View"
         xmlns:viewModels="clr-namespace:RssReader.ViewModel"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="500" Width="1000" FontSize="15">
 
     <Window.DataContext>
         <viewModels:AppViewModel/>
@@ -32,6 +32,14 @@
                     <MenuItem.Command>
                         <Binding Path="ShowOpenUserDialogCommand"/>
                     </MenuItem.Command>
+                </MenuItem>
+                <MenuItem Header="User settings...">
+                    <MenuItem.Command>
+                        <Binding Path="EditUserCommand"/>
+                    </MenuItem.Command>
+                    <MenuItem.CommandParameter>
+                        <Binding Path="SelectedUserMain"/>
+                    </MenuItem.CommandParameter>
                 </MenuItem>
                 <MenuItem Header="Close user">
                     <MenuItem.Command>

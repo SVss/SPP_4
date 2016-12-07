@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RssReader.View.Dialogs"
         mc:Ignorable="d"
-        Title="Add user" Height="129.644" Width="300" ResizeMode="NoResize" ShowInTaskbar="False">
+        Title="Add user" Height="161.644" Width="357" ResizeMode="NoResize" ShowInTaskbar="False"
+        FontSize="15">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>

@@ -8,13 +8,15 @@
              xmlns:viewModels="clr-namespace:RssReader.ViewModel"
              xmlns:model="clr-namespace:RssReader.Model"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="342">
+             d:DesignHeight="400" d:DesignWidth="500" FontSize="15">
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
+            <ColumnDefinition />
+            <ColumnDefinition Width="5" />
+            <ColumnDefinition />
+            <ColumnDefinition Width="5" />
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
         <GroupBox Grid.Column="0" Header="Feeds" BorderThickness="1">
@@ -22,7 +24,6 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition/>
-                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
@@ -57,47 +58,35 @@
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
-                <Grid Grid.Row="2">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-
-                    <Button Grid.Column="0" Margin="5 2 2.5 0">
+                <StackPanel Grid.Row="2" Orientation="Horizontal">
+                    <Button Margin="5 2 2.5 0"
+                            HorizontalAlignment="Center" Padding="10 0 10 0">
                         <Button.Command>
                             <Binding Path="SelectAllFeedsCommand"/>
                         </Button.Command>
 
                         <TextBlock>All</TextBlock>
                     </Button>
-                    <Button Grid.Column="1" Margin="2.5 2 5 0">
+                    <Button Margin="2.5 2 5 0"
+                            HorizontalAlignment="Center" Padding="5 0 5 0">
                         <Button.Command>
                             <Binding Path="UnselectAllFeedsCommand"/>
                         </Button.Command>
 
                         <TextBlock>None</TextBlock>
                     </Button>
-                </Grid>
-                <Button Grid.Row="3" Margin="5">
-                    <Button.Command>
-                        <Binding Path="UpdateNewsCommand"/>
-                    </Button.Command>
-
-                    <TextBlock>Update</TextBlock>
-                </Button>
+                </StackPanel>
             </Grid>
         </GroupBox>
-        <GroupBox Grid.Column="1" Header="News">
+        <GroupBox Grid.Column="2" Header="News">
             <Grid>
-            <Grid.RowDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>
-                <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
 
-            <Label Content="{Binding Path=NewsCount ,Mode=OneWay}"
-                ContentStringFormat="News count: {0}" />
-
-            <ListView Grid.Row="1" Margin="3" Name="NewsList" SelectionMode="Single">
+            <ListView Grid.Row="0" Margin="3" Name="NewsList" SelectionMode="Single">
                 <ListView.SelectedItem>
                     <Binding Path="SelectedNews" Mode="TwoWay"></Binding>
                 </ListView.SelectedItem>
@@ -114,12 +103,24 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+            <Label Grid.Row="1" Content="{Binding Path=NewsCount ,Mode=OneWay}"
+                ContentStringFormat="Count: {0}" />
+            <Button Grid.Row="2" Margin="5" Height="30"
+                    HorizontalAlignment="Center" Padding="20 0 20 0">
+                <Button.Command>
+                    <Binding Path="LoadNewsCommand"/>
+                </Button.Command>
+
+                <TextBlock>Load</TextBlock>
+            </Button>
         </Grid>
         </GroupBox>
 
-        <GroupBox Grid.Column="2" Header="Details">
+        <GroupBox Grid.Column="4" Header="Details"  VerticalAlignment="Center">
             <views:NewsView DataContext="{Binding ElementName=NewsList, Path=SelectedItem}"/>
         </GroupBox>
 
+        <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch"></GridSplitter>
+        <GridSplitter Grid.Column="3" Width="5" HorizontalAlignment="Stretch"></GridSplitter>
     </Grid>
 </UserControl>

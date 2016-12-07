@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:RssReader.View.Dialogs"
         xmlns:viewModels="clr-namespace:RssReader.ViewModel"
         mc:Ignorable="d"
-        Title="Open user" Height="350" Width="250" ShowInTaskbar="False">
+        Title="Open user" Height="350" Width="250" ShowInTaskbar="False"
+        FontSize="15">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>

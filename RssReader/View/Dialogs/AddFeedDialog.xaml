@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RssReader.View.Dialogs"
         mc:Ignorable="d"
-        Title="Add feed" Height="97.228" Width="300" ShowInTaskbar="False" ResizeMode="NoResize" Topmost="True">
+        Title="Add feed" Height="118.228" Width="300" ShowInTaskbar="False" ResizeMode="NoResize"
+        FontSize="15">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>

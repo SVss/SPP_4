@@ -97,7 +97,7 @@ namespace RssReader.ViewModel
 
             AddUserCommand = new RelayCommand(AddUser);
             RemoveUserCommand = new RelayCommand(RemoveUser, o => SelectedUsersConfigDialog != null);
-            EditUserCommand = new RelayCommand(ShowEditUserDialog, o => SelectedUsersConfigDialog != null);
+            EditUserCommand = new RelayCommand(ShowEditUserDialog, o => o != null);
 
             // configuration
 
@@ -252,9 +252,9 @@ namespace RssReader.ViewModel
 
         private void ShowEditUserDialog(object obj)
         {
-            if (SelectedUsersConfigDialog != null)
+            if (obj != null)
             {
-                var dialog = new EditUserDialog(SelectedUsersConfigDialog as UserViewModel);
+                var dialog = new EditUserDialog(obj as UserViewModel);
                 dialog.ShowDialog();
             }
         }

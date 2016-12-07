@@ -62,7 +62,7 @@ namespace RssReader.ViewModel
 
         // Commands
             // Main Window
-        public RelayCommand UpdateNewsCommand { get; }
+        public RelayCommand LoadNewsCommand { get; }
 
         public RelayCommand AddFeedCommand { get; }
         public RelayCommand RemoveFeedCommand { get; }
@@ -92,7 +92,7 @@ namespace RssReader.ViewModel
             NewsList.CollectionChanged += (sender, args) => { OnPropertyChanged("NewsCount"); };
 
             // commands
-            UpdateNewsCommand = new RelayCommand(UpdateNews, CanUpdateNews);
+            LoadNewsCommand = new RelayCommand(LoadNews, CanUpdateNews);
 
             AddFeedCommand = new RelayCommand(AddFeed);
             RemoveFeedCommand = new RelayCommand(RemoveFeed, o => SelectedFeed != null);
@@ -118,9 +118,9 @@ namespace RssReader.ViewModel
 
         // Internals
 
-        private void UpdateNews(object obj)
+        private void LoadNews(object obj)
         {
-            _model.UpdateNews(NewsList);
+            _model.LoadNews(NewsList);
         }
 
         private bool CanUpdateNews(object o)

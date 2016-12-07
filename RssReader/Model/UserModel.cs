@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading;
 using System.Windows;
 using System.Xml;
 using RssReader.Utils;
@@ -34,25 +35,26 @@ namespace RssReader.Model
         public void UpdateNews(ObservableCollection<NewsViewModel> newsList)
         {
             newsList.Clear();
+            SynchronizationContext context = SynchronizationContext.Current;
+
             foreach (var feed in FeedsList)
             {
-                MessageBox.Show($"{feed.Link} Started!");
-                /*
                 _userThreadPool.EnqueueTask(() =>
                 {
-                */
+                    //MessageBox.Show($"{feed.Link} Started!");
+
                     IList<NewsModel> result = RssFetcher.FetchNews(feed.Link);
-                    lock (_sync)
+                    // to add items in observable-collection's dispatcher thread:
+                    context.Send((x) =>
                     {
                         foreach (var news in result)
                         {
                             newsList.Add(new NewsViewModel(news));
                         }
-                    }
-                    MessageBox.Show($"{feed.Link} Finished!");
-                /*
+                    }, null);
+
+                    //MessageBox.Show($"{feed.Link} Finished!");
                 });
-                */
             }
         }
 

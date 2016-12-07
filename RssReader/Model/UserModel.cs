@@ -41,7 +41,7 @@ namespace RssReader.Model
             {
                 if (!feed.IsShown)
                     continue;
-
+                
                 _userThreadPool.EnqueueTask(() =>
                 {
                     IList<NewsModel> result = RssFetcher.FetchNews(feed.Link);
@@ -51,7 +51,15 @@ namespace RssReader.Model
                     {
                         foreach (var news in result)
                         {
-                            newsList.Add(new NewsViewModel(news));
+                            var res = new NewsViewModel(news);
+
+                            bool isShown = true;
+                            foreach (FilterModel filter in FiltersList)
+                            {
+                                isShown &= filter.Check(res.FullText);
+                            }
+                            if (isShown)
+                                newsList.Add(res);
                         }
                     }, null);
                 });

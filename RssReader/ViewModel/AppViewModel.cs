@@ -23,8 +23,10 @@ namespace RssReader.ViewModel
         // Commands
 
         public RelayCommand ExitCommand { get; }
+
         public RelayCommand AddUserCommand { get; }
         public RelayCommand RemoveUserCommand { get; }
+        public RelayCommand EditUserFiltersCommand { get; }
 
         // Public
 
@@ -37,6 +39,7 @@ namespace RssReader.ViewModel
             ExitCommand = new RelayCommand(CloseApplication);
             AddUserCommand = new RelayCommand(AddUser);
             RemoveUserCommand = new RelayCommand(RemoveUser);
+            EditUserFiltersCommand = new RelayCommand(EditUserFilters);
 
             // configuration
 
@@ -64,7 +67,7 @@ namespace RssReader.ViewModel
                 this.UsersList.Add(new UserViewModel(user));
             }
         }
-
+        
         // Internals
 
         private void MainWindowOnClosing(object sender, CancelEventArgs e)
@@ -91,6 +94,12 @@ namespace RssReader.ViewModel
         private void RemoveUser(object args)
         {
             MessageBox.Show("Remove user dialog.");
+        }
+
+
+        private void EditUserFilters(object obj)
+        {
+            MessageBox.Show("Edit user filters.");
         }
     }
 }

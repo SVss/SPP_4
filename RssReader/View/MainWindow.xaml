@@ -38,6 +38,12 @@
                         <Binding Path="RemoveUserCommand"/>
                     </MenuItem.Command>
                 </MenuItem>
+                <Separator/>
+                <MenuItem Header="Edit user filters...">
+                    <MenuItem.Command>
+                        <Binding Path="EditUserFiltersCommand"/>
+                    </MenuItem.Command>
+                </MenuItem>
             </MenuItem>
         </Menu>
         

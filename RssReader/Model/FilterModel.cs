@@ -120,7 +120,9 @@ namespace RssReader.Model
         protected bool CheckAndList(string s)
         {
             if (AndList.Count == 0)
-                return true;
+            {
+                return Type == FilterType.Include;
+            }
 
             bool result = true;
 
@@ -137,7 +139,9 @@ namespace RssReader.Model
         protected bool CheckOrList(string s)
         {
             if (OrList.Count == 0)
-                return true;
+            {
+                return Type == FilterType.Include;
+            }
 
             bool result = false;
 

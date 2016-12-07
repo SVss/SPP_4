@@ -5,6 +5,7 @@ using System.Windows;
 using System.Xml;
 using RssReader.Model;
 using RssReader.Utils;
+using RssReader.View.Dialogs;
 
 namespace RssReader.ViewModel
 {
@@ -12,17 +13,31 @@ namespace RssReader.ViewModel
     {
         private readonly AppModel _model = new AppModel();
 
-        public object SelectedUser { get; set; }
-        public ObservableCollection<UserViewModel> UsersList { get; } =
+        public object SelectedUserMain { get; set; }
+        public ObservableCollection<UserViewModel> OpenedUsersList { get; } =
             new ObservableCollection<UserViewModel>();
 
+        public object SelectedOpenUserDialog { get; set; }
+        public object SelectedUsersConfigDialog { get; set; }
+        public ObservableCollection<UserViewModel> UsersList { get; } =
+            new ObservableCollection<UserViewModel>();
+        
         // Commands
 
+            // Main window
         public RelayCommand ExitCommand { get; }
 
+        public RelayCommand ShowOpenUserDialogCommand { get; }
+        public RelayCommand CloseUserCommand { get; }
+        public RelayCommand ShowUsersConfigDialogCommand { get; }
+
+        public RelayCommand OpenUserCommand { get; }
+
+            // Users Config Dialog
         public RelayCommand AddUserCommand { get; }
         public RelayCommand RemoveUserCommand { get; }
-        public RelayCommand EditUserFiltersCommand { get; }
+        public RelayCommand EditUserCommand { get; }
+
 
         // Public
 
@@ -33,9 +48,16 @@ namespace RssReader.ViewModel
             // commands
 
             ExitCommand = new RelayCommand(CloseApplication);
+
+            ShowOpenUserDialogCommand = new RelayCommand(ShowOpenUserDialog);
+            CloseUserCommand = new RelayCommand(CloseCurrentUser, o => SelectedUserMain != null);
+            ShowUsersConfigDialogCommand = new RelayCommand(ShowUsersConfigDialog, CanOpenUsersConfig);
+
+            OpenUserCommand = new RelayCommand(OpenUser, o => SelectedOpenUserDialog != null);
+
             AddUserCommand = new RelayCommand(AddUser);
             RemoveUserCommand = new RelayCommand(RemoveUser);
-            EditUserFiltersCommand = new RelayCommand(EditUserFilters);
+            EditUserCommand = new RelayCommand(ShowEditUserDialog);
 
             // configuration
 
@@ -60,15 +82,16 @@ namespace RssReader.ViewModel
 
             foreach (UserModel user in _model.UsersList)
             {
-                this.UsersList.Add(new UserViewModel(user));
+                UsersList.Add(new UserViewModel(user));
             }
         }
         
+
         // Internals
 
         private void MainWindowOnClosing(object sender, CancelEventArgs e)
         {
-            foreach (var user in UsersList)
+            foreach (var user in OpenedUsersList)
             {
                 user.EndUpdating();
             }
@@ -82,6 +105,44 @@ namespace RssReader.ViewModel
             Application.Current.Shutdown();
         }
 
+        private void CloseCurrentUser(object obj)
+        {
+            MessageBox.Show("Close current user");
+        }
+
+        private void ShowOpenUserDialog(object obj)
+        {
+            var dialog = new OpenUserDialog(this);
+            dialog.ShowDialog();
+        }
+
+
+        private void OpenUser(object o)
+        {
+            OpenedUsersList.Add(SelectedOpenUserDialog as UserViewModel);
+            SelectedUserMain = SelectedOpenUserDialog;
+            OnPropertyChanged("SelectedUserMain");
+        }
+
+
+        private void ShowUsersConfigDialog(object obj)
+        {
+            MessageBox.Show("Users config dialog.");
+        }
+
+        private bool CanOpenUsersConfig(object o)
+        {
+            bool result = true;
+            foreach (UserViewModel user in OpenedUsersList)
+            {
+                result &= user.IsReady;
+            }
+            return result;
+        }
+
+
+        // Users Config Dialog
+
         private void AddUser(object args)
         {
             // TODO
@@ -94,11 +155,10 @@ namespace RssReader.ViewModel
             MessageBox.Show("Remove user dialog.");
         }
 
-
-        private void EditUserFilters(object obj)
+        private void ShowEditUserDialog(object obj)
         {
             // TODO
-            MessageBox.Show("Edit user filters.");
+            MessageBox.Show("Edit user.");
         }
     }
 }

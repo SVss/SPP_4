@@ -57,6 +57,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="View\Dialogs\OpenUserDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Dialogs\UsersConfigDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\FeedView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -93,6 +101,12 @@
     <Compile Include="ViewModel\NewsViewModel.cs" />
     <Compile Include="ViewModel\FeedViewModel.cs" />
     <Compile Include="ViewModel\UserViewModel.cs" />
+    <Compile Include="View\Dialogs\OpenUserDialog.xaml.cs">
+      <DependentUpon>OpenUserDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Dialogs\UsersConfigDialog.xaml.cs">
+      <DependentUpon>UsersConfigDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\FeedView.xaml.cs">
       <DependentUpon>FeedView.xaml</DependentUpon>
     </Compile>

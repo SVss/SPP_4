@@ -35,12 +35,15 @@ namespace RssReader.ViewModel
         public bool IsReady => _model.IsReady;
 
         // Commands
-
+            // Main Window
         public RelayCommand UpdateNewsCommand { get; }
 
         public RelayCommand UnselectAllFeedsCommand { get; }
         public RelayCommand SelectAllFeedsCommand { get; }
         public RelayCommand SwitchSelectedFeedCommand { get; }
+
+            // EditUser Dialog
+        // ...
 
         // Public
 

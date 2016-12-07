@@ -28,20 +28,20 @@
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="Users">
-                <MenuItem Header="Add user...">
+                <MenuItem Header="Open user...">
                     <MenuItem.Command>
-                        <Binding Path="AddUserCommand"/>
+                        <Binding Path="ShowOpenUserDialogCommand"/>
                     </MenuItem.Command>
                 </MenuItem>
-                <MenuItem Header="Remove user...">
+                <MenuItem Header="Close user">
                     <MenuItem.Command>
-                        <Binding Path="RemoveUserCommand"/>
+                        <Binding Path="CloseUserCommand"/>
                     </MenuItem.Command>
                 </MenuItem>
                 <Separator/>
-                <MenuItem Header="Edit user filters...">
+                <MenuItem Header="Users config...">
                     <MenuItem.Command>
-                        <Binding Path="EditUserFiltersCommand"/>
+                        <Binding Path="ShowUsersConfigDialogCommand"/>
                     </MenuItem.Command>
                 </MenuItem>
             </MenuItem>
@@ -49,11 +49,11 @@
         
         <TabControl Grid.Row="1" Name="Users">
             <TabControl.SelectedItem>
-                <Binding Path="SelectedUser"></Binding>
+                <Binding Path="SelectedUserMain" Mode="TwoWay"></Binding>
             </TabControl.SelectedItem>
 
             <TabControl.ItemsSource>
-                <Binding Path="UsersList"></Binding>
+                <Binding Path="OpenedUsersList"></Binding>
             </TabControl.ItemsSource>
             
             <TabControl.ItemTemplate>

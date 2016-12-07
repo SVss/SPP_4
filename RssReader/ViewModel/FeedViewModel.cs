@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using RssReader.Model;
 
 namespace RssReader.ViewModel
@@ -7,7 +6,19 @@ namespace RssReader.ViewModel
     public class FeedViewModel: BaseViewModel
     {
         private readonly FeedModel _model;
-        private bool _isShown = true;
+
+        public bool IsShown
+        {
+            get
+            {
+                return _model.IsShown;
+            }
+            set
+            {
+                _model.IsShown = value;
+                OnPropertyChanged();
+            }
+        }
 
         public string Link
         {
@@ -21,16 +32,6 @@ namespace RssReader.ViewModel
                     _model.Link = result;
                     OnPropertyChanged();
                 }
-            }
-        }
-
-        public bool IsShown
-        {
-            get { return _isShown; }
-            set
-            {
-                _isShown = value;
-                OnPropertyChanged();
             }
         }
 

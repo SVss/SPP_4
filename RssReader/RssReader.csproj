@@ -85,7 +85,6 @@
     <Compile Include="Model\UserModel.cs" />
     <Compile Include="Utils\ConfigConsts.cs" />
     <Compile Include="Utils\EventsManager.cs" />
-    <Compile Include="Utils\NewsConverter.cs" />
     <Compile Include="Utils\RelayCommand.cs" />
     <Compile Include="Utils\RssFetcher.cs" />
     <Compile Include="ViewModel\AppViewModel.cs" />

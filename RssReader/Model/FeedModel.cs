@@ -8,6 +8,7 @@ namespace RssReader.Model
     public class FeedModel
     {
         public Uri Link { get; set; }
+        public bool IsShown { get; set; } = true;
 
         // Public
 

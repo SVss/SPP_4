@@ -46,6 +46,14 @@ namespace RssReader.Utils
                         }
                         else if (entry.Name == RssConstants.DescriptionTag)
                         {
+                            foreach (XmlNode child in entry.ChildNodes)
+                            {
+                                if (child.NodeType == XmlNodeType.Text ||
+                                    child.NodeType == XmlNodeType.CDATA)
+                                {
+                                    descrition += child.Value;
+                                }
+                            }
                             descrition = entry.InnerText;
                         }
                         else if (entry.Name == RssConstants.LinkTag)

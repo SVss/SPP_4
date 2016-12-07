@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
+﻿using System.Collections.ObjectModel;
 using RssReader.Model;
 using RssReader.Utils;
 
@@ -16,6 +13,8 @@ namespace RssReader.ViewModel
 
         public ObservableCollection<NewsViewModel> NewsList { get; private set; }=
             new ObservableCollection<NewsViewModel>();
+
+        public string NewsCount => NewsList.Count.ToString();
 
         public object SelectedFeed { get; set; }
         public object SelectedNews { get; set; }
@@ -33,7 +32,6 @@ namespace RssReader.ViewModel
         // Commands
 
         public RelayCommand UpdateNewsCommand { get; }
-        public RelayCommand StopUpdateCommand { get; }
 
         public RelayCommand UnselectAllFeedsCommand { get; }
         public RelayCommand SelectAllFeedsCommand { get; }
@@ -49,9 +47,11 @@ namespace RssReader.ViewModel
                 this.FeedsList.Add(new FeedViewModel(feed));
             }
 
+
+            NewsList.CollectionChanged += (sender, args) => { OnPropertyChanged("NewsCount"); };
+
             // commands
             UpdateNewsCommand = new RelayCommand(UpdateNews);
-            StopUpdateCommand = new RelayCommand(StopUpdate);
 
             UnselectAllFeedsCommand = new RelayCommand(UnselectAllFeeds);
             SelectAllFeedsCommand = new RelayCommand(SelectAllFeeds);
@@ -59,11 +59,6 @@ namespace RssReader.ViewModel
         }
 
         // Internals
-
-        private void StopUpdate(object obj)
-        {
-            _model.StopUpdate();
-        }
 
         private void UpdateNews(object obj)
         {

@@ -1,4 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using RssReader.Model;
 using RssReader.Utils;
 
@@ -11,7 +14,7 @@ namespace RssReader.ViewModel
         public ObservableCollection<FeedViewModel> FeedsList { get; private set; } =
             new ObservableCollection<FeedViewModel>();
 
-        public ObservableCollection<NewsViewModel> NewsList =
+        public ObservableCollection<NewsViewModel> NewsList { get; private set; }=
             new ObservableCollection<NewsViewModel>();
 
         public object SelectedFeed { get; set; }
@@ -64,7 +67,7 @@ namespace RssReader.ViewModel
 
         private void UpdateNews(object obj)
         {
-            _model.UpdateNews();
+            _model.UpdateNews(NewsList);
         }
 
         private void UnselectAllFeeds(object args)

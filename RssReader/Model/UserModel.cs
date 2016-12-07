@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Windows;
 using System.Xml;
 using RssReader.Utils;
+using RssReader.ViewModel;
 using ThreadPool;
 
 namespace RssReader.Model
@@ -18,8 +20,8 @@ namespace RssReader.Model
         public List<FeedModel> FeedsList { get; } = new List<FeedModel>();
         public List<FilterModel> FiltersList { get; private set; } = new List<FilterModel>();
 
-        public ObservableCollection<NewsModel> NewsList { get; private set; } =
-            new ObservableCollection<NewsModel>();
+        //public ObservableCollection<NewsModel> NewsList { get; private set; } =
+        //    new ObservableCollection<NewsModel>();
 
         // Public
 
@@ -29,22 +31,28 @@ namespace RssReader.Model
             this.ThreadsCount = threadsCount;
         }
 
-        public void UpdateNews()
+        public void UpdateNews(ObservableCollection<NewsViewModel> newsList)
         {
-            NewsList.Clear();
+            newsList.Clear();
             foreach (var feed in FeedsList)
             {
+                MessageBox.Show($"{feed.Link} Started!");
+                /*
                 _userThreadPool.EnqueueTask(() =>
                 {
+                */
                     IList<NewsModel> result = RssFetcher.FetchNews(feed.Link);
                     lock (_sync)
                     {
                         foreach (var news in result)
                         {
-                            NewsList.Add(news);
+                            newsList.Add(new NewsViewModel(news));
                         }
                     }
+                    MessageBox.Show($"{feed.Link} Finished!");
+                /*
                 });
+                */
             }
         }
 

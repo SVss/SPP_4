@@ -5,7 +5,7 @@ namespace RssReader.ViewModel
 {
     public class NewsViewModel: BaseViewModel
     {
-        private const int ShortCaptionWidth = 30;
+        private const int ShortCaptionWidth = 103;
         private readonly NewsModel _model;
 
         public string Caption => _model.Caption;

@@ -15,10 +15,16 @@ namespace RssReader.Utils
 
             var result = new List<NewsModel>();
 
-            var xe = doc.FirstChild as XmlNode;
+            var xe = doc.FirstChild;
             if (xe is XmlDeclaration)
                 xe = xe.NextSibling;
 
+            if ((xe == null) || (xe.Name != RssConstants.RssTag))
+            {
+                return result;
+            }
+
+            xe = xe.FirstChild;
             if ((xe == null) || (xe.Name != RssConstants.ChannelTag))
             {
                 return result;
@@ -56,6 +62,7 @@ namespace RssReader.Utils
 
     internal static class RssConstants
     {
+        public static string RssTag => "rss";
         public static string ChannelTag => "channel";
         public static string ItemTag => "item";
         public static string TitleTag => "title";

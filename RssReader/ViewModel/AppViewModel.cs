@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Xml;
 using RssReader.Model;
@@ -107,7 +108,15 @@ namespace RssReader.ViewModel
 
         private void CloseCurrentUser(object obj)
         {
-            MessageBox.Show("Close current user");
+            OpenedUsersList.Remove(SelectedUserMain as UserViewModel);
+            if (OpenedUsersList.Count > 0)
+            {
+                SelectedUserMain = OpenedUsersList.First();
+            }
+            else
+            {
+                SelectedUserMain = null;
+            }
         }
 
         private void ShowOpenUserDialog(object obj)
@@ -119,7 +128,10 @@ namespace RssReader.ViewModel
 
         private void OpenUser(object o)
         {
-            OpenedUsersList.Add(SelectedOpenUserDialog as UserViewModel);
+            if (!OpenedUsersList.Contains(SelectedOpenUserDialog))
+            {
+                OpenedUsersList.Add(SelectedOpenUserDialog as UserViewModel);
+            }
             SelectedUserMain = SelectedOpenUserDialog;
             OnPropertyChanged("SelectedUserMain");
         }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
@@ -49,12 +48,16 @@ namespace RssReader.ViewModel
             get { return _model.Name; }
             set
             {
-                _model.Name = value;
-                OnPropertyChanged();
+                if (!string.IsNullOrEmpty(value))
+                {
+                    _model.Name = value;
+                    OnPropertyChanged();
+                }
             }
         }
 
         public bool IsReady => _model.IsReady;
+
 
         // Commands
             // Main Window
@@ -66,6 +69,7 @@ namespace RssReader.ViewModel
 
             // EditUser Dialog
         public RelayCommand OpenFiltersDialogCommand { get; }
+
 
         // Public
 
@@ -91,9 +95,14 @@ namespace RssReader.ViewModel
             OpenFiltersDialogCommand = new RelayCommand(OpenFiltersDialog);
         }
 
-        public void EndUpdating()
+        public void Open()
         {
-            _model.EndUpdating();
+            _model.Open();
+        }
+
+        public void Close()
+        {
+            _model.Close();
         }
 
         // Internals

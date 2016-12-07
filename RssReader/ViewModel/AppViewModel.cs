@@ -133,8 +133,10 @@ namespace RssReader.ViewModel
         {
             foreach (var user in OpenedUsersList)
             {
-                user.EndUpdating();
+                user.Close();
             }
+
+            OpenedUsersList.Clear();
 
             XmlDocument doc = _model.SaveUsersToXml();
             doc.Save(ConfigConsts.ConfigPath);
@@ -152,16 +154,21 @@ namespace RssReader.ViewModel
 
         private void CloseUser(object user)
         {
-            OpenedUsersList.Remove(user as UserViewModel);
-            if (user == SelectedUserMain)
+            var u = (user as UserViewModel);
+            if (u != null)
             {
-                if (OpenedUsersList.Count > 0)
+                u.Close();
+                OpenedUsersList.Remove(u);
+                if (u == SelectedUserMain)
                 {
-                    SelectedUserMain = OpenedUsersList.First();
-                }
-                else
-                {
-                    SelectedUserMain = null;
+                    if (OpenedUsersList.Count > 0)
+                    {
+                        SelectedUserMain = OpenedUsersList.First();
+                    }
+                    else
+                    {
+                        SelectedUserMain = null;
+                    }
                 }
             }
         }
@@ -175,9 +182,11 @@ namespace RssReader.ViewModel
 
         private void OpenUser(object o)
         {
-            if (!OpenedUsersList.Contains(SelectedOpenUserDialog))
+            var u = SelectedOpenUserDialog as UserViewModel;
+            if (u != null && !OpenedUsersList.Contains(u))
             {
-                OpenedUsersList.Add(SelectedOpenUserDialog as UserViewModel);
+                OpenedUsersList.Add(u);
+                u.Open();
             }
             SelectedUserMain = SelectedOpenUserDialog;
         }

@@ -13,7 +13,7 @@ namespace RssReader.Model
 {
     public class UserModel: INotifyPropertyChanged
     {
-        private ExtThreadPool _userThreadPool;
+        private ExtThreadPool _userThreadPool = null;
         private readonly object _sync = new object();
         private readonly SynchronizationContext _context = SynchronizationContext.Current;
 
@@ -63,7 +63,6 @@ namespace RssReader.Model
         {
             this.Name = name;
             this._threadsCount = threadsCount;
-            _userThreadPool = new ExtThreadPool(threadsCount);
         }
 
         public void UpdateNews(ObservableCollection<NewsViewModel> newsList)
@@ -112,11 +111,6 @@ namespace RssReader.Model
                 });
             }
 
-        }
-
-        public void EndUpdating()
-        {
-            _userThreadPool.Dispose();
         }
 
         public static UserModel FromXmlElement(XmlElement xe)
@@ -208,6 +202,17 @@ namespace RssReader.Model
         private void FeedModelOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
         {
             OnPropertyChanged("IsReady");
+        }
+
+        public void Open()
+        {
+            _userThreadPool = new ExtThreadPool(ThreadsCount);
+        }
+
+        public void Close()
+        {
+            _userThreadPool.Dispose();
+            _userThreadPool = null;
         }
     }
 }

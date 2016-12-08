@@ -89,6 +89,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\FilterView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\NewsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -147,6 +151,9 @@
     </Compile>
     <Compile Include="View\FeedView.xaml.cs">
       <DependentUpon>FeedView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\FilterView.xaml.cs">
+      <DependentUpon>FilterView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\NewsView.xaml.cs">
       <DependentUpon>NewsView.xaml</DependentUpon>

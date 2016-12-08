@@ -57,7 +57,8 @@ namespace RssReader.Model
         }
 
         public List<FeedModel> FeedsList { get; } = new List<FeedModel>();
-        public List<FilterModel> FiltersList { get; } = new List<FilterModel>();
+        public FilterModel IncludeFilter { get; set; }
+        public FilterModel ExcludeFilter { get; set; }
 
         public bool IsReady
         {
@@ -126,10 +127,7 @@ namespace RssReader.Model
                                 var res = new NewsViewModel(news);
 
                                 bool isShown = true;    // TODO: move filtering to view | add all news
-                                foreach (FilterModel filter in FiltersList)
-                                {
-                                    isShown &= filter.Check(res.FullText);
-                                }
+                                isShown = IncludeFilter.Check(res.FullText) && ExcludeFilter.Check(res.FullText);
                                 if (isShown)
                                     newsList.Add(res);
                             }
@@ -187,15 +185,25 @@ namespace RssReader.Model
                 throw new BadXmlException();
             }
 
-            foreach (XmlElement filter in child.ChildNodes)
+            if (child.ChildNodes.Count == 2)
             {
-                result.FiltersList.Add(FilterModel.FromXmlElement(filter));
+                foreach (XmlElement filter in child.ChildNodes)
+                {
+                    var nextFilter = FilterModel.FromXmlElement(filter);
+                    if (nextFilter is IncludeFilterModel)
+                    {
+                        result.IncludeFilter = nextFilter;
+                    }
+                    else if (nextFilter is ExcludeFilterModel)
+                    {
+                        result.ExcludeFilter = nextFilter;
+                    }
+                }
             }
-
-            if (result.FiltersList.Count == 0)
+            else
             {
-                result.FiltersList.Add(new IncludeFilterModel());
-                result.FiltersList.Add(new ExcludeFilterModel());
+                result.IncludeFilter = new IncludeFilterModel();
+                result.ExcludeFilter = new ExcludeFilterModel();
             }
 
             return result;
@@ -218,10 +226,10 @@ namespace RssReader.Model
 
             // Write filters
             child = document.CreateElement(ConfigConsts.FiltersListTag);
-            foreach (FilterModel filter in FiltersList)
-            {
-                child.AppendChild(filter.ToXmlElement(document));
-            }
+
+            child.AppendChild(IncludeFilter.ToXmlElement(document));
+            child.AppendChild(ExcludeFilter.ToXmlElement(document));
+            
             result.AppendChild(child);
 
             return result;

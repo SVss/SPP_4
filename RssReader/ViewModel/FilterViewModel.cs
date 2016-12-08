@@ -62,26 +62,20 @@ namespace RssReader.ViewModel
 
         private void RemoveFilter(object obj)
         {
-            var answ = MessageBox.Show("Do you really want to remove selected filter?", "Remove filter",
-                    MessageBoxButton.YesNo,
-                    MessageBoxImage.Question);
-            if (answ == MessageBoxResult.Yes)
+            var l = obj  as ObservableCollection<string>;
+            string filterToRemove = string.Empty;
+            if (l == AndList)
             {
-                var l = obj  as ObservableCollection<string>;
-                string filterToRemove = "";
-                if (l == AndList)
-                {
-                    filterToRemove = SelectedAndFilter as string;
-                }
-                else if (l == OrList)
-                {
-                    filterToRemove = SelectedOrFilter as string;
-                }
+                filterToRemove = SelectedAndFilter as string;
+            }
+            else if (l == OrList)
+            {
+                filterToRemove = SelectedOrFilter as string;
+            }
 
-                if (filterToRemove != null)
-                {
-                    l?.Remove(filterToRemove);
-                }
+            if (!string.IsNullOrEmpty(filterToRemove))
+            {
+                l?.Remove(filterToRemove);
             }
         }
     }

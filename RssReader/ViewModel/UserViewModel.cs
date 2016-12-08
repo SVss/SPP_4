@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Windows;
 using System.Windows.Input;
 using RssReader.Model;
 using RssReader.Utils;
@@ -40,8 +39,8 @@ namespace RssReader.ViewModel
         public ObservableCollection<NewsViewModel> NewsList { get; } =
             new ObservableCollection<NewsViewModel>();
 
-        public ObservableCollection<FilterViewModel> FiltersList { get; } =
-            new ObservableCollection<FilterViewModel>();
+        public FilterViewModel IncludeFilter { get; }
+        public FilterViewModel ExcludeFilter { get; }
 
         public string NewsCount => NewsList.Count.ToString();
 
@@ -81,10 +80,6 @@ namespace RssReader.ViewModel
             // AddUser Dialog
         public RelayCommand AddUserCommand { get; }
 
-            // Filters Dialog
-        public RelayCommand AddFilterCommand { get; }
-        public RelayCommand RemoveFilterCommand { get; }
-
         // Public
 
         public UserViewModel(UserModel model)
@@ -97,10 +92,8 @@ namespace RssReader.ViewModel
                 this.FeedsList.Add(new FeedViewModel(feed));
             }
 
-            foreach (FilterModel filter in _model.FiltersList)
-            {
-                FiltersList.Add(new FilterViewModel(filter));
-            }
+            IncludeFilter = new FilterViewModel(_model.IncludeFilter);
+            ExcludeFilter = new FilterViewModel(_model.ExcludeFilter);
 
             NewsList.CollectionChanged += (sender, args) => { OnPropertyChanged("NewsCount"); };
 
@@ -117,9 +110,6 @@ namespace RssReader.ViewModel
             OpenFiltersDialogCommand = new RelayCommand(OpenFiltersDialog);
 
             AddUserCommand = new RelayCommand(AddUser, CanAddUser);
-
-            AddFilterCommand = new RelayCommand(AddFilter);
-            RemoveFilterCommand = new RelayCommand(RemoveFilter, CanRemoveFilter);
         }
         
         public void Open()
@@ -212,21 +202,6 @@ namespace RssReader.ViewModel
         {
             return (!string.IsNullOrEmpty(Name) && (ThreadsCount > 0));
         }
-        
 
-        private void AddFilter(object o)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void RemoveFilter(object o)
-        {
-            throw new NotImplementedException();
-        }
-
-        private bool CanRemoveFilter(object o)
-        {
-            return false;
-        }
     }
 }

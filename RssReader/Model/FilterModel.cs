@@ -127,7 +127,7 @@ namespace RssReader.Model
             int i = 0;
             while (result && (i < AndList.Count))
             {
-                result = s.Contains(AndList[i]);
+                result = s.ToUpper().Contains(AndList[i].ToUpper());
                 ++i;
             }
 
@@ -146,7 +146,7 @@ namespace RssReader.Model
             int i = 0;
             while (!result && (i < OrList.Count))
             {
-                result = s.Contains(OrList[i]);
+                result = s.ToUpper().Contains(OrList[i].ToUpper());
                 ++i;
             }
 

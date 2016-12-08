@@ -60,7 +60,7 @@ namespace RssReader.ViewModel
 
         private void OpenInBrowser(object args)
         {
-            System.Diagnostics.Process.Start(Link.ToString());
+            System.Diagnostics.Process.Start(Link);
         }
     }
 }

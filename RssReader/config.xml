@@ -1,0 +1,39 @@
+<root>
+  <user name="Topic" threads="10">
+    <feeds>
+      <channel>https://libeldoc.bsuir.by/feed/rss_2.0/site</channel>
+      <channel>https://news.tut.by/rss/afisha.rss</channel>
+      <channel>https://news.tut.by/rss/geonews/minsk.rss</channel>
+      <channel>http://naviny.by/rss/hi_tech.xml</channel>
+      <channel>http://naviny.by/rss/economic.xml</channel>
+      <channel>https://news.tut.by/rss/sport/football.rss</channel>
+      <channel>InvalidLink</channel>
+      <channel>https://www.kv.by/kv-rss-publications</channel>
+    </feeds>
+    <filters>
+      <include />
+      <exclude />
+    </filters>
+  </user>
+  <user name="TestUser" threads="3">
+    <feeds>
+      <channel>http://n1.by/rss/all.xml</channel>
+      <channel>https://news.tut.by/rss/afisha.rss</channel>
+      <channel>https://www.charter97.org/ru/rss/interview/</channel>
+      <channel>http://naviny.by/rss/hi_tech.xml</channel>
+      <channel>https://www.charter97.org/ru/rss/health/</channel>
+      <channel>https://www.charter97.org/ru/rss/military/</channel>
+      <channel>about:blank</channel>
+    </feeds>
+    <filters>
+      <include>
+        <or>
+          <item>Ди Каприо</item>
+          <item>Саакаш</item>
+          <item>Санников</item>
+        </or>
+      </include>
+      <exclude />
+    </filters>
+  </user>
+</root>

@@ -171,8 +171,11 @@ namespace RssReader.ViewModel
 
             if (!((res == null) || !res.Value))
             {
-                FeedsList.Add(f);
-                _model.AddFeed(f.GetModel());
+                if (!string.IsNullOrEmpty(f.Link))
+                {
+                    FeedsList.Add(f);
+                    _model.AddFeed(f.GetModel());
+                }
             }
         }
 

@@ -23,7 +23,7 @@
                    VerticalAlignment="Center"></Label>
         <TextBox Grid.Column="1" Grid.Row="0" Margin="5">
             <TextBox.Text>
-                <Binding Path="Value" Mode="TwoWay"/>
+                <Binding Path="Link" Mode="TwoWay"/>
             </TextBox.Text>
         </TextBox>
         

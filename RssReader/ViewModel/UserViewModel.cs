@@ -64,9 +64,26 @@ namespace RssReader.ViewModel
 
         public bool IsReady => _model.IsReady;
 
+        private bool _isFiltred = true;
+        public bool IsFiltered
+        {
+            get
+            {
+                return _isFiltred;
+            }
+            set
+            {
+                if (_isFiltred != value)
+                {
+                    _isFiltred = value;
+                    OnPropertyChanged();
+                    FilterNewsListExecute();
+                }
+            }
+        }
 
         // Commands
-            // Main Window
+        // Main Window
         public RelayCommand LoadNewsCommand { get; }
 
         public RelayCommand AddFeedCommand { get; }
@@ -146,15 +163,31 @@ namespace RssReader.ViewModel
 
         private void FilterNewsList(object sender, NotifyCollectionChangedEventArgs notifyCollectionChangedEventArgs)
         {
-            _shownNewsCount = 0;
-            foreach (NewsViewModel news in NewsList)
-            {
-                bool r = IncludeFilter.Check(news.FullText) &&
-                    ExcludeFilter.Check(news.FullText);
+            FilterNewsListExecute();
+        }
 
-                news.IsVisible = r;
-                if (r)
+        private void FilterNewsListExecute()
+        {
+            _shownNewsCount = 0;
+            if (IsFiltered)
+            {
+                foreach (NewsViewModel news in NewsList)
                 {
+                    bool r = IncludeFilter.Check(news.FullText) &&
+                             ExcludeFilter.Check(news.FullText);
+
+                    news.IsVisible = r;
+                    if (r)
+                    {
+                        ++_shownNewsCount;
+                    }
+                }
+            }
+            else
+            {
+                foreach (NewsViewModel news in NewsList)
+                {
+                    news.IsVisible = true;
                     ++_shownNewsCount;
                 }
             }

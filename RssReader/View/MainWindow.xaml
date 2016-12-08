@@ -33,14 +33,14 @@
                         <Binding Path="ShowOpenUserDialogCommand"/>
                     </MenuItem.Command>
                 </MenuItem>
-                <MenuItem Header="User settings...">
+                <!--<MenuItem Header="User settings...">
                     <MenuItem.Command>
                         <Binding Path="EditUserCommand"/>
                     </MenuItem.Command>
                     <MenuItem.CommandParameter>
                         <Binding Path="SelectedUserMain"/>
                     </MenuItem.CommandParameter>
-                </MenuItem>
+                </MenuItem>-->
                 <MenuItem Header="Close user">
                     <MenuItem.Command>
                         <Binding Path="CloseUserCommand"/>

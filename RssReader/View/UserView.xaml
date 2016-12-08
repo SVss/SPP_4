@@ -28,6 +28,11 @@
                 </Grid.RowDefinitions>
 
                 <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <CheckBox VerticalAlignment="Center" IsChecked="{Binding Path=IsFiltered, Mode=TwoWay}">
+                        <CheckBox.Content>
+                            <TextBlock>Filter</TextBlock>
+                        </CheckBox.Content>
+                    </CheckBox>
                     <Button HorizontalAlignment="Center" Width="20" Margin="3"
                             Command="{Binding Path=AddFeedCommand}">
                         <Button.Content>+</Button.Content>

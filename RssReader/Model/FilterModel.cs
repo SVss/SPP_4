@@ -13,10 +13,7 @@ namespace RssReader.Model
 
         // Public
 
-        public virtual bool Check(string s)
-        {
-            return false;
-        }
+        public abstract bool Check(string s);
 
         public static FilterModel FromXmlElement(XmlElement xe)
         {

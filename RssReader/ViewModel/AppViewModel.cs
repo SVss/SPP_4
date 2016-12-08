@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Xml;
+using Microsoft.Win32;
 using RssReader.Model;
 using RssReader.Utils;
 using RssReader.View.Dialogs;
@@ -16,6 +17,13 @@ namespace RssReader.ViewModel
         private object _selectedUserMain;
         private object _selectedOpenUser;
         private object _selectedUserConfig;
+
+        private static SaveFileDialog _saveDialog = new SaveFileDialog()
+        {
+            Title = "Export config...",
+            DefaultExt = "xml",
+            Filter = "XML-file|*.xml"
+        };
 
         public object SelectedUserMain
         {
@@ -67,6 +75,7 @@ namespace RssReader.ViewModel
             // Main window
         public RelayCommand ExitCommand { get; }
         public RelayCommand SaveConfigCommand { get; }
+        public RelayCommand ExportConfigCommand { get; }
 
         public RelayCommand ShowOpenUserDialogCommand { get; }
         public RelayCommand CloseUserCommand { get; }
@@ -89,7 +98,8 @@ namespace RssReader.ViewModel
             // commands
 
             ExitCommand = new RelayCommand(CloseApplication);
-            SaveConfigCommand = new RelayCommand(o => SaveConfig());
+            SaveConfigCommand = new RelayCommand(o => SaveConfig(ConfigConsts.ConfigPath));
+            ExportConfigCommand = new RelayCommand(o => ExportConfig());
 
             ShowOpenUserDialogCommand = new RelayCommand(ShowOpenUserDialog);
             CloseUserCommand = new RelayCommand(CloseCurrentUser, CanCloseCurrentUser);
@@ -127,7 +137,6 @@ namespace RssReader.ViewModel
                 UsersList.Add(new UserViewModel(user));
             }
         }
-        
 
         // Internals
 
@@ -140,13 +149,37 @@ namespace RssReader.ViewModel
 
             OpenedUsersList.Clear();
 
-            SaveConfig();
+            SaveConfig(ConfigConsts.ConfigPath);
         }
 
-        private void SaveConfig()
+        private void ExportConfig()
+        {
+            bool? openResult = _saveDialog.ShowDialog();
+            if (openResult == null || !openResult.Value)
+                return;
+
+            string path = _saveDialog.FileNames[0];
+
+            try
+            {
+                SaveConfig(path);
+                MessageBox.Show("Config exported", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show(
+                    string.Format("Can't save file {0}", path),
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+            SaveConfig(path);
+        }
+
+        private void SaveConfig(string path)
         {
             XmlDocument doc = _model.SaveUsersToXml();
-            doc.Save(ConfigConsts.ConfigPath);
+            doc.Save(path);
         }
 
         private void CloseApplication(object args)

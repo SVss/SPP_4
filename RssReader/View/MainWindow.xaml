@@ -26,7 +26,12 @@
                         <Binding Path="SaveConfigCommand"/>
                     </MenuItem.Command>
                 </MenuItem>
-                <Separator/>
+            <MenuItem Header="Export config">
+                <MenuItem.Command>
+                    <Binding Path="ExportConfigCommand"/>
+                </MenuItem.Command>
+            </MenuItem>
+            <Separator/>
                 <MenuItem Header="Exit">
                     <MenuItem.Command>
                         <Binding Path="ExitCommand"/>

@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
@@ -39,6 +40,9 @@ namespace RssReader.ViewModel
         public ObservableCollection<NewsViewModel> NewsList { get; } =
             new ObservableCollection<NewsViewModel>();
 
+        public ObservableCollection<FilterViewModel> FiltersList { get; } =
+            new ObservableCollection<FilterViewModel>();
+
         public string NewsCount => NewsList.Count.ToString();
 
         public object SelectedFeed { get; set; }
@@ -77,6 +81,10 @@ namespace RssReader.ViewModel
             // AddUser Dialog
         public RelayCommand AddUserCommand { get; }
 
+            // Filters Dialog
+        public RelayCommand AddFilterCommand { get; }
+        public RelayCommand RemoveFilterCommand { get; }
+
         // Public
 
         public UserViewModel(UserModel model)
@@ -87,6 +95,11 @@ namespace RssReader.ViewModel
             foreach (FeedModel feed in _model.FeedsList)
             {
                 this.FeedsList.Add(new FeedViewModel(feed));
+            }
+
+            foreach (FilterModel filter in _model.FiltersList)
+            {
+                FiltersList.Add(new FilterViewModel(filter));
             }
 
             NewsList.CollectionChanged += (sender, args) => { OnPropertyChanged("NewsCount"); };
@@ -104,8 +117,11 @@ namespace RssReader.ViewModel
             OpenFiltersDialogCommand = new RelayCommand(OpenFiltersDialog);
 
             AddUserCommand = new RelayCommand(AddUser, CanAddUser);
-        }
 
+            AddFilterCommand = new RelayCommand(AddFilter);
+            RemoveFilterCommand = new RelayCommand(RemoveFilter, CanRemoveFilter);
+        }
+        
         public void Open()
         {
             _model.Open();
@@ -183,7 +199,8 @@ namespace RssReader.ViewModel
 
         private void OpenFiltersDialog(object obj)
         {
-            MessageBox.Show("Filters Dialog here");
+            var dialog = new FiltersDialog(this);
+            dialog.ShowDialog();
         }
 
         private void AddUser(object obj)
@@ -194,6 +211,22 @@ namespace RssReader.ViewModel
         private bool CanAddUser(object arg)
         {
             return (!string.IsNullOrEmpty(Name) && (ThreadsCount > 0));
+        }
+        
+
+        private void AddFilter(object o)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void RemoveFilter(object o)
+        {
+            throw new NotImplementedException();
+        }
+
+        private bool CanRemoveFilter(object o)
+        {
+            return false;
         }
     }
 }

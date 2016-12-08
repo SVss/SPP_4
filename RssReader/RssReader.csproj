@@ -57,6 +57,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="View\Dialogs\AddFilterDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\Dialogs\AddFeedDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -64,6 +68,10 @@
     <Page Include="View\Dialogs\AddUserDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Dialogs\FiltersDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Dialogs\OpenUserDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -100,6 +108,7 @@
     <Compile Include="BadXmlException.cs" />
     <Compile Include="Model\AppModel.cs" />
     <Compile Include="Model\FeedModel.cs" />
+    <Compile Include="Utils\FilterType.cs" />
     <Compile Include="Utils\FeedStatus.cs" />
     <Compile Include="Model\FilterModel.cs" />
     <Compile Include="Model\NewsModel.cs" />
@@ -110,14 +119,22 @@
     <Compile Include="Utils\RssFetcher.cs" />
     <Compile Include="ViewModel\AppViewModel.cs" />
     <Compile Include="ViewModel\BaseViewModel.cs" />
+    <Compile Include="ViewModel\FilterViewModel.cs" />
     <Compile Include="ViewModel\NewsViewModel.cs" />
     <Compile Include="ViewModel\FeedViewModel.cs" />
+    <Compile Include="ViewModel\StringContainer.cs" />
     <Compile Include="ViewModel\UserViewModel.cs" />
+    <Compile Include="View\Dialogs\AddFilterDialog.xaml.cs">
+      <DependentUpon>AddFilterDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Dialogs\AddFeedDialog.xaml.cs">
       <DependentUpon>AddFeedDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Dialogs\AddUserDialog.xaml.cs">
       <DependentUpon>AddUserDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Dialogs\FiltersDialog.xaml.cs">
+      <DependentUpon>FiltersDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Dialogs\OpenUserDialog.xaml.cs">
       <DependentUpon>OpenUserDialog.xaml</DependentUpon>

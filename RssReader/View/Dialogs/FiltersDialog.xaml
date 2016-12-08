@@ -1,0 +1,109 @@
+﻿<Window x:Class="RssReader.View.Dialogs.FiltersDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RssReader.View.Dialogs"
+        xmlns:views="clr-namespace:RssReader.View"
+        xmlns:viewModels="clr-namespace:RssReader.ViewModel"
+        xmlns:utils="clr-namespace:RssReader.Utils"
+        mc:Ignorable="d"
+        Title="FiltersDialog" Height="375" Width="447.865" FontSize="15">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        
+        <ListBox Grid.Row="0">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <DockPanel VerticalAlignment="Stretch"  Width="Auto"/>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemsSource>
+                <Binding Path="FiltersList"/>
+            </ListBox.ItemsSource>
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="{x:Type viewModels:FilterViewModel}">
+                    <Grid Width="300" VerticalAlignment="Stretch">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+                                   VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Text" Value="Filter"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Type}" Value="{x:Static utils:FilterType.Include}">
+                                            <Setter Property="Text" Value="Include filter"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Type}" Value="{x:Static utils:FilterType.Exclude}">
+                                            <Setter Property="Text" Value="Exclude filter"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+
+                        <ListBox Name="AndListBox" Grid.Column="0" Grid.Row="1">
+                            <ListBox.ItemsSource>
+                                <Binding Path="AndList" Mode="OneWay"/>
+                            </ListBox.ItemsSource>
+                            <ListBox.SelectedItem>
+                                <Binding Path="SelectedAndFilter" Mode="TwoWay"/>
+                            </ListBox.SelectedItem>
+                        </ListBox>
+
+                        <StackPanel Grid.Column="0" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button HorizontalAlignment="Center" Width="25" Margin="3"
+                            Command="{Binding Path=AddAndFilterCommand}" CommandParameter="{Binding Path=AndList}">
+                                <Button.Content>+</Button.Content>
+                            </Button>
+                            <Button HorizontalAlignment="Center" Width="25" Margin="3"
+                            Command="{Binding Path=RemoveAndFilterCommand}" CommandParameter="{Binding Path=AndList}">
+                                <Button.Content>-</Button.Content>
+                            </Button>
+                        </StackPanel>
+
+                        <ListBox Name="OrListBox" Grid.Column="1" Grid.Row="1">
+                            <ListBox.ItemsSource>
+                                <Binding Path="OrList" Mode="OneWay"/>
+                            </ListBox.ItemsSource>
+                            <ListBox.SelectedItem>
+                                <Binding Path="SelectedOrFilter" Mode="TwoWay"/>
+                            </ListBox.SelectedItem>
+                        </ListBox>
+
+                        <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button HorizontalAlignment="Center" Width="25" Margin="3"
+                            Command="{Binding Path=AddOrFilterCommand}" CommandParameter="{Binding Path=OrList}">
+                                <Button.Content>+</Button.Content>
+                            </Button>
+                            <Button HorizontalAlignment="Center" Width="25" Margin="3"
+                            Command="{Binding Path=RemoveOrFilterCommand}" CommandParameter="{Binding Path=OrList}">
+                                <Button.Content>-</Button.Content>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <Button Grid.Row="1"
+                HorizontalAlignment="Center"
+                Padding="20 0 20 0" Margin="3"
+                Click="CloseClick">
+            <Button.Content>Close</Button.Content>
+        </Button>
+    </Grid>
+</Window>

@@ -57,7 +57,7 @@ namespace RssReader.Model
         }
 
         public List<FeedModel> FeedsList { get; } = new List<FeedModel>();
-        public List<FilterModel> FiltersList { get; private set; } = new List<FilterModel>();
+        public List<FilterModel> FiltersList { get; } = new List<FilterModel>();
 
         public bool IsReady
         {
@@ -125,7 +125,7 @@ namespace RssReader.Model
                             {
                                 var res = new NewsViewModel(news);
 
-                                bool isShown = true;
+                                bool isShown = true;    // TODO: move filtering to view | add all news
                                 foreach (FilterModel filter in FiltersList)
                                 {
                                     isShown &= filter.Check(res.FullText);
@@ -190,6 +190,12 @@ namespace RssReader.Model
             foreach (XmlElement filter in child.ChildNodes)
             {
                 result.FiltersList.Add(FilterModel.FromXmlElement(filter));
+            }
+
+            if (result.FiltersList.Count == 0)
+            {
+                result.FiltersList.Add(new IncludeFilterModel());
+                result.FiltersList.Add(new ExcludeFilterModel());
             }
 
             return result;

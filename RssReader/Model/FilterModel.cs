@@ -189,10 +189,4 @@ namespace RssReader.Model
         }
 
     }
-
-    public enum FilterType
-    {
-        Include = 0,
-        Exclude
-    }
 }

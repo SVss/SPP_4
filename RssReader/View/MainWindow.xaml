@@ -21,12 +21,19 @@
 
         <Menu Grid.Row="0">
             <MenuItem Header="File">
+                <MenuItem Header="Save config">
+                    <MenuItem.Command>
+                        <Binding Path="SaveConfigCommand"/>
+                    </MenuItem.Command>
+                </MenuItem>
+                <Separator/>
                 <MenuItem Header="Exit">
                     <MenuItem.Command>
                         <Binding Path="ExitCommand"/>
                     </MenuItem.Command>
                 </MenuItem>
             </MenuItem>
+
             <MenuItem Header="Users">
                 <MenuItem Header="Open user...">
                     <MenuItem.Command>

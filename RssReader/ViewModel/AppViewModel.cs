@@ -66,6 +66,7 @@ namespace RssReader.ViewModel
 
             // Main window
         public RelayCommand ExitCommand { get; }
+        public RelayCommand SaveConfigCommand { get; }
 
         public RelayCommand ShowOpenUserDialogCommand { get; }
         public RelayCommand CloseUserCommand { get; }
@@ -88,6 +89,7 @@ namespace RssReader.ViewModel
             // commands
 
             ExitCommand = new RelayCommand(CloseApplication);
+            SaveConfigCommand = new RelayCommand(o => SaveConfig());
 
             ShowOpenUserDialogCommand = new RelayCommand(ShowOpenUserDialog);
             CloseUserCommand = new RelayCommand(CloseCurrentUser, CanCloseCurrentUser);
@@ -138,6 +140,11 @@ namespace RssReader.ViewModel
 
             OpenedUsersList.Clear();
 
+            SaveConfig();
+        }
+
+        private void SaveConfig()
+        {
             XmlDocument doc = _model.SaveUsersToXml();
             doc.Save(ConfigConsts.ConfigPath);
         }

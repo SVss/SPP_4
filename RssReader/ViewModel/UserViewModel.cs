@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Windows.Input;
@@ -133,7 +134,7 @@ namespace RssReader.ViewModel
             SelectAllFeedsCommand = new RelayCommand(SelectAllFeeds);
             SwitchSelectedFeedCommand = new RelayCommand(SwitchSelectedFeed);
 
-            OpenFiltersDialogCommand = new RelayCommand(OpenFiltersDialog);
+            OpenFiltersDialogCommand = new RelayCommand(OpenFiltersDialog, CanLoadNews);
 
             AddUserCommand = new RelayCommand(AddUser, CanAddUser);
         }

@@ -82,6 +82,8 @@ namespace RssReader.Model
         {
             this.Name = name;
             this._threadsCount = threadsCount;
+            IncludeFilter = new IncludeFilterModel();
+            ExcludeFilter = new ExcludeFilterModel();
         }
 
         public void AddFeed(FeedModel feed)
@@ -125,11 +127,7 @@ namespace RssReader.Model
                             foreach (var news in result)
                             {
                                 var res = new NewsViewModel(news);
-
-                                bool isShown = true;    // TODO: move filtering to view | add all news
-                                isShown = IncludeFilter.Check(res.FullText) && ExcludeFilter.Check(res.FullText);
-                                if (isShown)
-                                    newsList.Add(res);
+                                newsList.Add(res);
                             }
                             feed.Status = FeedStatus.Ready;
 

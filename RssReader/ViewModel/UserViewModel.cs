@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Windows.Input;
 using RssReader.Model;
@@ -42,7 +42,9 @@ namespace RssReader.ViewModel
         public FilterViewModel IncludeFilter { get; }
         public FilterViewModel ExcludeFilter { get; }
 
-        public string NewsCount => NewsList.Count.ToString();
+        private int _shownNewsCount = 0;
+        public string ShownNewsCount => _shownNewsCount.ToString();
+        public string TotalNewsCount => NewsList.Count.ToString();
 
         public object SelectedFeed { get; set; }
         public object SelectedNews { get; set; }
@@ -95,10 +97,17 @@ namespace RssReader.ViewModel
             IncludeFilter = new FilterViewModel(_model.IncludeFilter);
             ExcludeFilter = new FilterViewModel(_model.ExcludeFilter);
 
-            NewsList.CollectionChanged += (sender, args) => { OnPropertyChanged("NewsCount"); };
+            // AutoFiltering on filters change
+            IncludeFilter.AndList.CollectionChanged += FilterNewsList;
+            IncludeFilter.OrList.CollectionChanged += FilterNewsList;
+            ExcludeFilter.AndList.CollectionChanged += FilterNewsList;
+            ExcludeFilter.OrList.CollectionChanged += FilterNewsList;
+
+            NewsList.CollectionChanged += (sender, args) => { OnPropertyChanged("TotalNewsCount"); };
+            NewsList.CollectionChanged += FilterNewsList;
 
             // commands
-            LoadNewsCommand = new RelayCommand(LoadNews, CanUpdateNews);
+            LoadNewsCommand = new RelayCommand(LoadNews, CanLoadNews);
 
             AddFeedCommand = new RelayCommand(AddFeed);
             RemoveFeedCommand = new RelayCommand(RemoveFeed, o => SelectedFeed != null);
@@ -111,7 +120,7 @@ namespace RssReader.ViewModel
 
             AddUserCommand = new RelayCommand(AddUser, CanAddUser);
         }
-        
+
         public void Open()
         {
             _model.Open();
@@ -129,9 +138,27 @@ namespace RssReader.ViewModel
             _model.LoadNews(NewsList);
         }
 
-        private bool CanUpdateNews(object o)
+        private bool CanLoadNews(object o)
         {
             return IsReady;
+        }
+
+
+        private void FilterNewsList(object sender, NotifyCollectionChangedEventArgs notifyCollectionChangedEventArgs)
+        {
+            _shownNewsCount = 0;
+            foreach (NewsViewModel news in NewsList)
+            {
+                bool r = IncludeFilter.Check(news.FullText) &&
+                    ExcludeFilter.Check(news.FullText);
+
+                news.IsVisible = r;
+                if (r)
+                {
+                    ++_shownNewsCount;
+                }
+            }
+            OnPropertyChanged("ShownNewsCount");
         }
 
 

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Windows;
+﻿using System.Collections.ObjectModel;
 using RssReader.Model;
 using RssReader.Utils;
 using RssReader.View.Dialogs;
@@ -39,6 +37,11 @@ namespace RssReader.ViewModel
 
             AddOrFilterCommand = new RelayCommand(AddFilter);
             RemoveOrFilterCommand = new RelayCommand(RemoveFilter, o => SelectedOrFilter != null);
+        }
+
+        public bool Check(string s)
+        {
+            return _model.Check(s);
         }
 
         // Internals

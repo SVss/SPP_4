@@ -7,9 +7,9 @@ namespace RssReader.Utils
 {
     public static class RssFetcher
     {
-        public static IList<NewsModel> FetchNews(Uri linkPath)
+        public static IList<NewsModel> FetchNews(string linkPath)
         {
-            XmlTextReader reader = new XmlTextReader(linkPath.ToString());
+            XmlTextReader reader = new XmlTextReader(linkPath);
             XmlDocument doc = new XmlDocument();
 
             try
@@ -18,7 +18,9 @@ namespace RssReader.Utils
             }
             catch (Exception ex)
             {
-                if (ex is System.Net.WebException || ex is System.NotSupportedException)
+                if (ex is System.Net.WebException ||
+                    ex is System.NotSupportedException ||
+                    ex is System.IO.FileNotFoundException)
                     return null;
 
                 throw;

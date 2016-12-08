@@ -28,14 +28,14 @@
                 </Grid.RowDefinitions>
 
                 <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button HorizontalAlignment="Center" Width="20" Margin="3"
-                        Command="{Binding Path=AddFeedCommand}">
-                    <Button.Content>+</Button.Content>
-                </Button>
-                <Button HorizontalAlignment="Center" Width="20" Margin="3"
-                        Command="{Binding Path=RemoveFeedCommand}">
-                    <Button.Content>-</Button.Content>
-                </Button>
+                    <Button HorizontalAlignment="Center" Width="20" Margin="3"
+                            Command="{Binding Path=AddFeedCommand}">
+                        <Button.Content>+</Button.Content>
+                    </Button>
+                    <Button HorizontalAlignment="Center" Width="20" Margin="3"
+                            Command="{Binding Path=RemoveFeedCommand}">
+                        <Button.Content>-</Button.Content>
+                    </Button>
                 </StackPanel>
 
                 <ListView Grid.Row="1" Margin="3" SelectionMode="Single">
@@ -83,37 +83,50 @@
                 <Grid.RowDefinitions>
                     <RowDefinition></RowDefinition>
                     <RowDefinition Height="Auto"></RowDefinition>
-                <RowDefinition Height="Auto"></RowDefinition>
-            </Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                </Grid.RowDefinitions>
 
-            <ListView Grid.Row="0" Margin="3" Name="NewsList" SelectionMode="Single">
-                <ListView.SelectedItem>
-                    <Binding Path="SelectedNews" Mode="TwoWay"></Binding>
-                </ListView.SelectedItem>
-                <ListView.ItemsSource>
-                    <Binding Path="NewsList"/>
-                </ListView.ItemsSource>
-                <ListView.ItemTemplate>
-                    <DataTemplate DataType="{x:Type viewModels:NewsViewModel}">
-                        <TextBlock>
-                            <TextBlock.Text>
-                                <Binding Path="ShortCaption"/>
-                            </TextBlock.Text>
-                        </TextBlock>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-            <Label Grid.Row="1" Content="{Binding Path=NewsCount ,Mode=OneWay}"
-                ContentStringFormat="Count: {0}" />
-            <Button Grid.Row="2" Margin="5" Height="30"
-                    HorizontalAlignment="Center" Padding="20 0 20 0">
-                <Button.Command>
-                    <Binding Path="LoadNewsCommand"/>
-                </Button.Command>
+                <ListBox Grid.Row="0" Margin="3" Name="NewsList" SelectionMode="Single">
+                    <ListBox.SelectedItem>
+                        <Binding Path="SelectedNews" Mode="TwoWay"></Binding>
+                    </ListBox.SelectedItem>
+                    <ListBox.ItemsSource>
+                        <Binding Path="NewsList"/>
+                    </ListBox.ItemsSource>
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="{x:Type ListBoxItem}"  >
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=IsVisible}" Value="False">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate DataType="{x:Type viewModels:NewsViewModel}">
+                            <TextBlock>
+                                <TextBlock.Text>
+                                    <Binding Path="ShortCaption"/>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <Label Grid.Row="1">
+                    <StackPanel Grid.Row="1" Orientation="Horizontal">
+                        <TextBlock Text="{Binding Path=ShownNewsCount, StringFormat=News count: {0}/}"/>
+                        <TextBlock Text="{Binding Path=TotalNewsCount, StringFormat={}{0}}"/>
+                    </StackPanel>
+                </Label>
+                <Button Grid.Row="2" Margin="5" Height="30"
+                        HorizontalAlignment="Center" Padding="20 0 20 0">
+                    <Button.Command>
+                        <Binding Path="LoadNewsCommand"/>
+                    </Button.Command>
 
-                <TextBlock>Load</TextBlock>
-            </Button>
-        </Grid>
+                    <TextBlock>Load</TextBlock>
+                </Button>
+            </Grid>
         </GroupBox>
 
         <GroupBox Grid.Column="4" Header="Details"  VerticalAlignment="Center">

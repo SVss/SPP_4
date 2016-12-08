@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using RssReader.Model;
 using RssReader.Utils;
 
@@ -24,14 +23,12 @@ namespace RssReader.ViewModel
 
         public string Link
         {
-            get { return _model.Link.ToString(); }
+            get { return _model.Link; }
             set
             {
-                Uri result;
-                bool res = Uri.TryCreate(value, UriKind.Absolute, out result);
-                if (res)
+                if (value != _model.Link)
                 {
-                    _model.Link = result;
+                    _model.Link = value;
                     OnPropertyChanged();
                 }
             }

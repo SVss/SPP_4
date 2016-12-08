@@ -27,7 +27,22 @@ namespace RssReader.ViewModel
             }
         }
 
-        public bool IsVisible { get; set; } = true; // changed by Filters
+        private bool _isVisible = true;
+        public bool IsVisible
+        {
+            get
+            {
+                return _isVisible;
+            }
+            set
+            {
+                if (_isVisible != value)
+                {
+                    _isVisible = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         // Commands
 

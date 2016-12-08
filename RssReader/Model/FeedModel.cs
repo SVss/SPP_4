@@ -10,7 +10,7 @@ namespace RssReader.Model
     {
         private FeedStatus _status = FeedStatus.Ready;
 
-        public Uri Link { get; set; }
+        public string Link { get; set; }
         public bool IsShown { get; set; } = true;
 
         public FeedStatus Status
@@ -33,13 +33,7 @@ namespace RssReader.Model
 
         public FeedModel(string linkPath)
         {
-            Uri result;
-            if (!Uri.TryCreate(linkPath, UriKind.Absolute, out result))
-            {
-                throw new ArgumentException();
-            }
-
-            Link = result;
+            Link = linkPath;
         }
 
         public static FeedModel FromXmlElement(XmlElement xe)
